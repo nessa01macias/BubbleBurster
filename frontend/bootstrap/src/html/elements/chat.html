@@ -12,102 +12,121 @@
 <!-- [Body] Start -->
 
 <body @@bodySetup>
-  @@include('../layouts/layout-vertical.html')
+@@include('../layouts/layout-vertical.html')
 
-  <!-- [ Main Content ] start -->
-  <div class="pc-container">
-    <div class="pc-content">
-      <!-- [ Typography ] end -->
+<!-- for bootstrap folder run:-->
+<!-- npm install bubbly-bg -->
+<script src="https://cdn.jsdelivr.net/npm/bubbly-bg@1.0.0/dist/bubbly-bg.js"></script>
+<script>bubbly({
+  colorStart: "#ffffff",
+  colorStop: "#bed9f8",
+  canvas: document.querySelector("#background"), // default is created and attached automatically
+  compose: "lighter", // default is "lighter"
+  animate: true, // default is true
+  bubbles: Math.random() * 100, // default is Math.floor((canvas.width + canvas.height) * 0.02);
+  shadowColor: "#a1c6d1", // default is #fff
+  shadowBlur: 1, // default is 4
+  fillFunc: () => `hsla(${Math.random() * 360}, 100%, 50%, ${Math.random() * 0.25})`, // default is () => `hsla(0, 0%, 100%, ${r() * 0.1})`)
+  angleFunc: () => Math.random() * Math.PI * 2, // default is this
+  velocityFunc: () => 1.5 + Math.random() * 1.5, // default is this
+  radiusFunc: () => 9 + Math.random() * 25 // default is 4 + Math.random() * width / 25
+});
+</script>
+<!-- [ Main Content ] start -->
 
-      <!-- Chatbox Section -->
-      <div class="py-5">
-        <!-- Full-width chatbox -->
-        <div class="card w-100" id="chat1" style="border-radius: 15px;">
-          <div class="card-header d-flex justify-content-between align-items-center p-3 text-white border-bottom-0"
-                style="background-color: #4daadf; border-top-left-radius: 15px; border-top-right-radius: 15px;">
-            <i class="fas fa-angle-left"></i>
-            <p class="mb-0 fw-bold">🫧Live chat🫧</p>
-            <i class="fas fa-times"></i>
-          </div>
-          <div class="card-body" id="chat-body" style="height: 400px; overflow-y: auto;">
-            <!-- Chat Messages Will Be Added Dynamically Here -->
-          </div>
-          <div class="form-outline p-3">
-            <textarea class="form-control" id="chat-input" rows="2" placeholder="Type your message..."></textarea>
-            <button class="btn mt-2" id="send-button" style="background-color:#dfeffa; color:#4daadf;">Send</button>
-          </div>
+<div class="pc-container">
+  <div class="pc-content">
+    <!-- [ Typography ] end -->
+
+    <!-- Chatbox Section -->
+    <div class="py-5">
+      <!-- Full-width chatbox -->
+      <div class="card w-100" id="chat1" style="border-radius: 15px;">
+        <div class="card-header d-flex justify-content-between align-items-center p-3 text-white border-bottom-0"
+             style="background-color: #4daadf; border-top-left-radius: 15px; border-top-right-radius: 15px;">
+          <i class="fas fa-angle-left"></i>
+          <p class="mb-0 fw-bold">🫧Live chat🫧</p>
+          <i class="fas fa-times"></i>
+        </div>
+        <div class="card-body" id="chat-body" style="height: 400px; overflow-y: auto;">
+          <!-- Chat Messages Will Be Added Dynamically Here -->
+        </div>
+        <div class="form-outline p-3">
+          <textarea class="form-control" id="chat-input" rows="2" placeholder="Type your message..."></textarea>
+          <button class="btn mt-2" id="send-button" style="background-color:#dfeffa; color:#4daadf;">Send</button>
         </div>
       </div>
-
-      <!-- [ Main Content ] end -->
     </div>
+
+    <!-- [ Main Content ] end -->
   </div>
+</div>
 
-  <script>
-    const chatBody = document.getElementById("chat-body");
-    const chatInput = document.getElementById("chat-input");
-    const sendButton = document.getElementById("send-button");
+<script>
+  const chatBody = document.getElementById("chat-body");
+  const chatInput = document.getElementById("chat-input");
+  const sendButton = document.getElementById("send-button");
 
-    function addMessage(message, sender = "user") {
-      const messageElement = document.createElement("div");
-      messageElement.className = `d-flex flex-row ${sender === "bot" ? "justify-content-start" : "justify-content-end"} mb-4`;
-      messageElement.innerHTML = sender === "bot"
-        ? `
+  function addMessage(message, sender = "user") {
+    const messageElement = document.createElement("div");
+    messageElement.className = `d-flex flex-row ${sender === "bot" ? "justify-content-start" : "justify-content-end"} mb-4`;
+    messageElement.innerHTML = sender === "bot"
+            ? `
       <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp" alt="avatar 1"
         style="width: 45px; height: 100%;">
       <div class="p-3 ms-3" style="border-radius: 15px; background-color: rgba(57, 192, 237,.2);">
         <p class="small mb-0">${message}</p>
       </div>`
-        : `
+            : `
       <div class="p-3 me-3 border" style="border-radius: 15px; background-color: #fbfbfb;">
         <p class="small mb-0">${message}</p>
       </div>
       <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp" alt="avatar 1"
         style="width: 45px; height: 100%;">`;
-      chatBody.appendChild(messageElement);
-      chatBody.scrollTop = chatBody.scrollHeight; // Auto-scroll to the bottom
+    chatBody.appendChild(messageElement);
+    chatBody.scrollTop = chatBody.scrollHeight; // Auto-scroll to the bottom
+  }
+
+  async function sendMessage() {
+    const userMessage = chatInput.value.trim();
+    if (!userMessage) return;
+
+    // Display user message
+    addMessage(userMessage, "user");
+
+    // Clear input field
+    chatInput.value = "";
+
+    // Send message to backend
+    try {
+      const response = await fetch("http://127.0.0.1:5000/get_chat_response", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: userMessage })
+      });
+      const data = await response.json();
+
+      // Display bot response
+      addMessage(data.response, "bot");
+    } catch (error) {
+      console.error("Error communicating with the backend:", error);
+      addMessage("Error: Unable to communicate with the server.", "bot");
     }
+  }
 
-    async function sendMessage() {
-      const userMessage = chatInput.value.trim();
-      if (!userMessage) return;
-
-      // Display user message
-      addMessage(userMessage, "user");
-
-      // Clear input field
-      chatInput.value = "";
-
-      // Send message to backend
-      try {
-        const response = await fetch("http://127.0.0.1:5000/get_chat_response", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ message: userMessage })
-        });
-        const data = await response.json();
-
-        // Display bot response
-        addMessage(data.response, "bot");
-      } catch (error) {
-        console.error("Error communicating with the backend:", error);
-        addMessage("Error: Unable to communicate with the server.", "bot");
-      }
+  // Attach event listeners
+  sendButton.addEventListener("click", sendMessage);
+  chatInput.addEventListener("keypress", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault(); // Prevent line break
+      sendMessage();
     }
-
-    // Attach event listeners
-    sendButton.addEventListener("click", sendMessage);
-    chatInput.addEventListener("keypress", (event) => {
-      if (event.key === "Enter" && !event.shiftKey) {
-        event.preventDefault(); // Prevent line break
-        sendMessage();
-      }
-    });
-  </script>
-  <!-- [ Main Content ] end -->
-  @@include('../layouts/footer-block.html') @@include('../layouts/footer-js.html')
+  });
+</script>
+<!-- [ Main Content ] end -->
+@@include('../layouts/footer-block.html') @@include('../layouts/footer-js.html')
 
 </body>
 <!-- [Body] end -->

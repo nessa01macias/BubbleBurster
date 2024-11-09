@@ -1,1 +1,0 @@
-# Generates embeddings functions (for RAG system)

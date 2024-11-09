@@ -1,1 +1,0 @@
- # RAG-based chatbot with static data for now

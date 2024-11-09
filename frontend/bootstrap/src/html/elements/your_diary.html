@@ -1,154 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    @@include('../layouts/head-page-meta.html', {'title': 'Submit Feedback'}) @@include('../layouts/head-css.html')
-  </head>
+<head>
+  @@include('../layouts/head-page-meta.html', {'title': 'Submit Feedback'})
+  @@include('../layouts/head-css.html')
+  <style>
+    .btn-disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .submission-result {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 4px;
+    }
+    .sentiment-negative {
+      background-color: #ffebee;
+      border: 1px solid #ffcdd2;
+    }
+    .sentiment-positive {
+      background-color: #e8f5e9;
+      border: 1px solid #c8e6c9;
+    }
+  </style>
+</head>
 
-  <body @@bodySetup>
-    @@include('../layouts/layout-vertical.html')
+<body @@bodySetup>
+@@include('../layouts/layout-vertical.html')
 
-    <!-- [ Main Content ] start -->
-    <div class="pc-container">
-      <div class="pc-content">
-        <div class="container my-5 w-50">
-          <h2 class="text-center">What is on your mind (work related)?</h2>
-          <form id="feedbackForm" onsubmit="event.preventDefault(); submitFeedback();">
-            <!-- Department Input -->
-            <div class="mb-3">
-              <label for="feedback-department" class="form-label">Select Department:</label>
-              <select id="feedback-department" class="form-select">
-                <option value="IT">IT</option>
-                <option value="HR">HR</option>
-                <option value="Sales">Sales</option>
-                <option value="Marketing">Marketing</option>
-                <!-- Add more departments as needed -->
-              </select>
-            </div>
+<!-- [ Main Content ] start -->
+<div class="pc-container">
+  <div class="pc-content">
+    <div class="container my-5 w-50">
+      <h2 class="text-center">What is on your mind (work related)?</h2>
+      <form id="feedbackForm" onsubmit="event.preventDefault(); submitFeedback();">
+        <!-- Department Input -->
+        <div class="mb-3">
+          <label for="feedback-department" class="form-label">Select Department:</label>
+          <select id="feedback-department" class="form-select">
+            <option value="IT"><span class="department-emoji">💻</span> IT</option>
+            <option value="HR"><span class="department-emoji">👥</span> HR</option>
+            <option value="Sales"><span class="department-emoji">💰</span> Sales</option>
+            <option value="Marketing"><span class="department-emoji">📢</span> Marketing</option>
 
-            <!-- Additional Details Input Box -->
-            <div class="mb-3">
-              <label for="detailsInput" class="form-label">Describe your thoughts:</label>
-              <textarea id="detailsInput" class="form-control" rows="4" placeholder="Tell more about your thoughts here..."></textarea>
-            </div>
+          </select>
+        </div>
 
-            <!-- Anonymity Toggle -->
-            <div class="mb-3">
-              <label class="form-label">Submit Anonymously:</label>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="anonymity" id="anonymityYes" value="yes" />
-                <label class="form-check-label" for="anonymityYes">Yes</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="anonymity" id="anonymityNo" value="no" checked />
-                <label class="form-check-label" for="anonymityNo">No</label>
-              </div>
-            </div>
+        <!-- Additional Details Input Box -->
+        <div class="mb-3">
+          <label for="detailsInput" class="form-label">Describe your thoughts:</label>
+          <textarea id="detailsInput" class="form-control" rows="4" placeholder="Tell more about your thoughts here..."></textarea>
+        </div>
 
-            <!-- Submit Button -->
-            <button type="submit" class="btn btn-primary">Save</button>
-          </form>
-
-          <!-- Output for Debugging (Optional) -->
-          <div class="mt-4">
-            <h4>Output:</h4>
-            <pre id="output" class="border p-3 bg-light"></pre>
+        <!-- Anonymity Toggle -->
+        <div class="mb-3">
+          <label class="form-label">Submit Anonymously:</label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="anonymity" id="anonymityYes" value="yes" />
+            <label class="form-check-label" for="anonymityYes">Yes</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="anonymity" id="anonymityNo" value="no" checked />
+            <label class="form-check-label" for="anonymityNo">No</label>
           </div>
         </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="submitButton" class="btn btn-primary">Save</button>
+      </form>
+
+      <!-- Submission Result -->
+      <div id="submissionResult" class="submission-result">
+        <h4>Submitted Issue:</h4>
+        <div id="issueDetails"></div>
+      </div>
+
+      <!-- Output for Debugging (Optional) -->
+      <div class="mt-4">
+        <h4>Output:</h4>
+        <pre id="output" class="border p-3 bg-light"></pre>
       </div>
     </div>
-    <!-- [ Main Content ] end -->
+  </div>
+</div>
+<!-- [ Main Content ] end -->
 
-    @@include('../layouts/footer-block.html') @@include('../layouts/footer-js.html')
+@@include('../layouts/footer-block.html')
+@@include('../layouts/footer-js.html')
 
-    <!-- Script Section -->
-    <script>
-      async function submitFeedback() {
-        const department = document.getElementById('feedback-department').value;
-        const details = document.getElementById('detailsInput').value;
-        const anonymity = document.querySelector('input[name="anonymity"]:checked').value;
-        const content = details; // Define content to be the details input for feedback
+<!-- Script Section -->
+<script>
+  async function submitFeedback() {
+    const submitButton = document.getElementById('submitButton');
+    const detailsInput = document.getElementById('detailsInput');
+    const submissionResult = document.getElementById('submissionResult');
+    const issueDetails = document.getElementById('issueDetails');
 
-        try {
-          // Send the feedback content to Flask API for classification
-          const response = await fetch('http://127.0.0.1:5000/classify_feedback', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ content })
-          });
+    // Get current date in YYYY-MM-DD format
+    const currentDate = new Date().toISOString().split('T')[0];
 
-          // Parse the response from the server
-          const data = await response.json();
+    // Disable button and add visual feedback
+    submitButton.classList.add('btn-disabled');
+    submitButton.disabled = true;
 
-          // Log received data and check response structure
-          console.log('Received data:', data);
-          if (typeof data.category !== 'string' || typeof data.sentiment !== 'string' || typeof data.summary !== 'string') {
-            console.error('Invalid response structure from API:', data);
-            return;
-          }
+    const department = document.getElementById('feedback-department').value;
+    const details = detailsInput.value;
+    const anonymity = document.querySelector('input[name="anonymity"]:checked').value;
+    const content = details;
 
-          const { category, sentiment, summary } = data;
+    try {
+      // Send the feedback content to Flask API for classification
+      const response = await fetch('http://127.0.0.1:5000/classify_feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ content })
+      });
 
-          // Retrieve and update categories in localStorage
-          const categories = JSON.parse(localStorage.getItem('categories')) || {};
-          console.log('Categories object in localStorage:', categories);
+      // Parse the response from the server
+      const data = await response.json();
 
-          // Update category feedback counters
-          if (categories[category]) {
-            if (sentiment === 'positive') {
-              categories[category].positiveFeedback += 1;
-              categories[category].ranking -= 1;
-            } else if (sentiment === 'negative') {
-              categories[category].negativeFeedback += 1;
-              categories[category].ranking += 1;
-            }
-            console.log('Updated category in localStorage:', categories[category]);
-          } else {
-            console.error('Category not found in localStorage:', category);
-          }
+      // Log received data and check response structure
+      console.log('Received data:', data);
+      if (typeof data.category !== 'string' || typeof data.sentiment !== 'string' || typeof data.summary !== 'string') {
+        console.error('Invalid response structure from API:', data);
+        return;
+      }
 
-          // Save the updated categories back to localStorage
-          localStorage.setItem('categories', JSON.stringify(categories));
+      const { category, sentiment, summary } = data;
 
-          // Update issues and progress tracker
-          const issues = JSON.parse(localStorage.getItem('issues')) || [];
-
-          const newIssue = {
-            id: issues.length + 1,
-            summary, // High-level summary from AI
-            content, // Detailed user input
-            department, // Department chosen by user
-            category, // AI-determined category
-            sentiment, // AI-determined sentiment
-            anonymity // User's anonymity choice
-          };
-          issues.push(newIssue);
-          localStorage.setItem('issues', JSON.stringify(issues));
-
-          // Add entry to progress tracker if not already present
-          let progressTracker = JSON.parse(localStorage.getItem('progressTracker')) || [];
-          progressTracker.push({
-            issueId: newIssue.id, // Link to the issue ID for cross-reference
-            department,
-            category,
-            summary,
-            status: 'To Do', // Default status for new issues
-            tags: [category], // Tags to track issue nature
-            actionsTaken: [], // Array to store progress notes or actions
-            anonymity // Include anonymity for reference
-          });
-          localStorage.setItem('progressTracker', JSON.stringify(progressTracker));
-
-          // Clear the form after submission
-          document.getElementById('feedbackForm').reset();
-
-          // Optionally display the result in the output area for debugging
-          document.getElementById('output').textContent = JSON.stringify(newIssue, null, 2);
-        } catch (error) {
-          console.error('Error submitting feedback:', error);
+      // Update categories in localStorage
+      const categories = JSON.parse(localStorage.getItem('categories')) || {};
+      if (categories[category]) {
+        if (sentiment === 'positive') {
+          categories[category].positiveFeedback += 1;
+          categories[category].ranking -= 1;
+        } else if (sentiment === 'negative') {
+          categories[category].negativeFeedback += 1;
+          categories[category].ranking += 1;
         }
       }
-    </script>
-  </body>
+      localStorage.setItem('categories', JSON.stringify(categories));
+
+      // Update issues with date
+      const issues = JSON.parse(localStorage.getItem('issues')) || [];
+      let issueCounter = parseInt(localStorage.getItem('issueCounter') || '0');
+      issueCounter++;
+      localStorage.setItem('issueCounter', issueCounter.toString());
+
+      const newIssue = {
+        id: issueCounter,
+        summary,
+        content,
+        department,
+        category,
+        sentiment,
+        anonymity,
+        date: currentDate  // Add date field
+      };
+      issues.push(newIssue);
+      localStorage.setItem('issues', JSON.stringify(issues));
+
+      // Update progress tracker with date
+      let progressTracker = JSON.parse(localStorage.getItem('progressTracker')) || [];
+      const newEntry = {
+        issueId: newIssue.id,
+        department,
+        category,
+        summary,
+        status: 'To Do',
+        tags: [category],
+        actionsTaken: [],
+        anonymity,
+        seen: false,
+        date: currentDate  // Add date field
+      };
+      progressTracker.push(newEntry);
+      localStorage.setItem('progressTracker', JSON.stringify(progressTracker));
+
+      // Update submission result box style based on sentiment
+      submissionResult.className = 'submission-result';
+      submissionResult.classList.add(sentiment === 'positive' ? 'sentiment-positive' : 'sentiment-negative');
+
+      // Display the submission result
+      issueDetails.innerHTML = `
+            <p><strong>Department:</strong> ${department}</p>
+            <p><strong>Category:</strong> ${category}</p>
+            <p><strong>Summary:</strong> ${summary}</p>
+            <p><strong>Sentiment:</strong> ${sentiment}</p>
+            <p><strong>Date:</strong> ${currentDate}</p>
+        `;
+      submissionResult.style.display = 'block';
+
+      // Clear the form
+      detailsInput.value = '';
+      document.getElementById('output').textContent = JSON.stringify(newIssue, null, 2);
+
+      // Update notifications
+      updateDashboardNotifications();
+
+      // Re-enable button after 2 seconds
+      setTimeout(() => {
+        submitButton.classList.remove('btn-disabled');
+        submitButton.disabled = false;
+      }, 2000);
+
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+      submitButton.classList.remove('btn-disabled');
+      submitButton.disabled = false;
+    }
+  }
+
+
+  // Your alert script
+  function checkNewIssues() {
+    const issueCounter = parseInt(localStorage.getItem('issueCounter') || '0');
+    if (issueCounter > 0) {
+      const issuesAlert = document.getElementById('issues-alert');
+      if (issuesAlert) {
+        issuesAlert.textContent = '!';
+      }
+    }
+  }
+
+  // Call this when the page loads
+  document.addEventListener('DOMContentLoaded', checkNewIssues);
+</script>
+</body>
 </html>

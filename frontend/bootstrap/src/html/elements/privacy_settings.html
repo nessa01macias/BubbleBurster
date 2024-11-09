@@ -5,82 +5,117 @@
   @@include('../layouts/head-page-meta.html', {'title': 'Privacy Settings'})
   @@include('../layouts/head-css.html')
   <style>
-    /* Styling for the settings page */
-    .settings-card {
-      background: #f8f9fa;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(51, 43, 43, 0.1);
-      padding: 20px;
-      margin-bottom: 20px;
-      transition: transform 0.2s, box-shadow 0.2s;
+    /* Global container styling for consistent background */
+    body {
+      background-color: #f4f6f9;
+      font-family: Arial, sans-serif;
     }
 
-    .settings-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    .settings-container {
+      max-width: 700px;
+      margin: auto;
+      padding: 40px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     }
 
+    /* Title styling */
     .settings-title {
-      font-size: 1.4em;
-      font-weight: bold;
-      color: #343a40;
-      margin-bottom: 15px;
+      font-size: 2em;
+      font-weight: 600;
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    /* Settings card styling */
+    .settings-card {
+      background-color: #f9fbfc;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+    }
+
+    .settings-card h5 {
+      font-size: 1.2em;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 20px;
       text-align: center;
     }
 
+    /* Form check styling for toggles */
+    .form-check {
+      display: flex;
+      align-items: center;
+      padding: 10px 0;
+      font-size: 1em;
+      font-weight: 400;
+      color: #555;
+      border-bottom: 1px solid #eee;
+    }
+
+    .form-check:last-child {
+      border-bottom: none;
+    }
+
+    .form-check img {
+      width: 24px;
+      height: 24px;
+      margin-right: 15px;
+      border-radius: 50%;
+    }
+
+    /* Improved alignment for form-check label and switch */
     .form-check-label {
-      font-size: 1.1em;
-      color: #495057;
-      cursor: pointer;
+      flex-grow: 1;
     }
 
     .form-check-input {
-      transform: scale(1.3);
+      transform: scale(1.2);
       cursor: pointer;
+      margin-left: auto;
     }
 
-    /* Tooltip styling */
-    .tooltip {
-      position: relative;
-      display: inline-block;
-    }
-
-    .tooltip .tooltip-text {
-      visibility: hidden;
-      width: 180px;
-      background-color: #000;
-      color: #fff;
-      text-align: center;
-      border-radius: 5px;
-      padding: 5px;
-      position: absolute;
-      z-index: 1;
-      bottom: 125%;
-      left: 50%;
-      margin-left: -90px;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .tooltip:hover .tooltip-text {
-      visibility: visible;
-      opacity: 0.9;
-    }
-
-    /* Button to save settings */
+    /* Save button styling */
     .save-btn {
+      display: block;
+      width: 100%;
       background-color: #007bff;
       color: white;
-      padding: 10px 20px;
+      padding: 12px;
+      font-size: 1.1em;
+      font-weight: bold;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 1em;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s ease;
+      text-align: center;
     }
 
     .save-btn:hover {
       background-color: #0056b3;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .settings-container {
+        padding: 20px;
+      }
+
+      .settings-title {
+        font-size: 1.8em;
+      }
+
+      .form-check {
+        font-size: 0.9em;
+      }
+
+      .save-btn {
+        font-size: 1em;
+      }
     }
   </style>
 </head>
@@ -91,58 +126,46 @@
   <!-- Main Content Start -->
   <div class="pc-container">
     <div class="pc-content">
-      <div class="container my-5 w-50">
-        <h2 class="text-center">Privacy Settings</h2>
+      <div class="settings-container">
+        <h2 class="settings-title">Privacy Settings</h2>
 
         <!-- Privacy Settings Card -->
         <div class="settings-card">
-          <div class="settings-title">Show Summaries Based on My Data to</div>
+          <h5>Show Summaries Based on My Data to</h5>
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="teamSwitch">
+            <img src="../assets/images/men.svg" alt="Team Icon">
             <label class="form-check-label" for="teamSwitch">Own Team</label>
-            <span class="tooltip"><i class="fas fa-info-circle"></i>
-              <span class="tooltip-text">Allow your team to view summary data.</span>
-            </span>
+            <input class="form-check-input" type="checkbox" id="teamSwitch">
           </div>
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="managerSwitch">
+            <img src="../assets/images/settings.svg" alt="Manager Icon">
             <label class="form-check-label" for="managerSwitch">Own Manager</label>
-            <span class="tooltip"><i class="fas fa-info-circle"></i>
-              <span class="tooltip-text">Allow your manager to view your data summaries.</span>
-            </span>
+            <input class="form-check-input" type="checkbox" id="managerSwitch">
           </div>
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="managerManagerSwitch">
+            <img src="../assets/images/communication.svg" alt="Manager's Manager Icon">
             <label class="form-check-label" for="managerManagerSwitch">Manager's Manager</label>
-            <span class="tooltip"><i class="fas fa-info-circle"></i>
-              <span class="tooltip-text">Allow higher-level managers to access summaries.</span>
-            </span>
+            <input class="form-check-input" type="checkbox" id="managerManagerSwitch">
           </div>
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="upperManagementSwitch">
+            <img src="../assets/images/company.svg" alt="Upper Management Icon">
             <label class="form-check-label" for="upperManagementSwitch">Upper Management</label>
-            <span class="tooltip"><i class="fas fa-info-circle"></i>
-              <span class="tooltip-text">Allow upper management access to summaries.</span>
-            </span>
+            <input class="form-check-input" type="checkbox" id="upperManagementSwitch">
           </div>
         </div>
 
         <!-- Data Collection Card -->
         <div class="settings-card">
-          <div class="settings-title">Data Collection Settings</div>
+          <h5>Data Collection Settings</h5>
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="dataCollectionSwitch">
+            <img src="../assets/images/secure.svg" alt="Data Collection Icon">
             <label class="form-check-label" for="dataCollectionSwitch">Opt-in for Data Collection</label>
-            <span class="tooltip"><i class="fas fa-info-circle"></i>
-              <span class="tooltip-text">Allow data collection to enhance personalized insights.</span>
-            </span>
+            <input class="form-check-input" type="checkbox" id="dataCollectionSwitch">
           </div>
         </div>
 
         <!-- Save Button -->
-        <div class="text-center">
-          <button class="save-btn" onclick="saveSettings()">Save Settings</button>
-        </div>
+        <button class="save-btn" onclick="saveSettings()">Save Settings</button>
       </div>
     </div>
   </div>
@@ -197,4 +220,5 @@
     window.addEventListener("load", loadSettings);
   </script>
 </body>
+
 </html>

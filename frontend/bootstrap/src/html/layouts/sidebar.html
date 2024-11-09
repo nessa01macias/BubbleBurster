@@ -1,5 +1,5 @@
 <!-- [ Sidebar Menu ] start -->
-<nav class="pc-sidebar">
+<nav class="pc-sidebar" id="sidebar">
   <div class="navbar-wrapper">
     <div class="m-header">
       <a href="../dashboard/index.html" class="b-brand text-primary">
@@ -12,13 +12,101 @@
         @@include('./menu-list.html')
       </ul>
       <div class="card nav-action-card bg-brand-color-1">
-        <!--  <div class="card-body" style="background-image: url('../assets/images/layout/nav-card-bg.svg')">
-          <h5 class="text-white">Upgrade to Pro</h5>
-          <p class="text-white text-opacity-75">To get more features and components</p>
-          <a href="https://codedthemes.com/item/gradient-able-admin-template/" class="btn btn-light" target="_blank">Buy now</a>
-        </div> -->
+        <!-- Additional content (if any) -->
       </div>
     </div>
   </div>
 </nav>
 <!-- [ Sidebar Menu ] end -->
+
+<!-- Toggle Sidebar Button (Only Visible on Mobile) -->
+<header class="pc-header">
+  <div class="header-wrapper">
+    <div class="me-auto pc-mob-drp">
+      <ul class="list-unstyled">
+        <li class="pc-h-item pc-sidebar-popup">
+          <a href="#" class="pc-head-link ms-0" id="mobile-toggle">
+            <i class="ph ph-list"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<!-- CSS for Sidebar Transition and Mobile Visibility -->
+<style>
+  /* Sidebar hidden by default on mobile */
+  @media (max-width: 768px) {
+    #sidebar {
+      transform: translateX(-250px);
+      transition: transform 0.3s ease;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 250px;
+      background-color: #ffffff; /* Adjust as needed */
+      z-index: 1000;
+    }
+
+    /* Sidebar visible when 'open' class is added */
+    #sidebar.open {
+      transform: translateX(0);
+    }
+  }
+
+  /* Overlay to cover content when sidebar is open */
+  #sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+    z-index: 999; /* Below the sidebar */
+  }
+  #sidebar-overlay.show {
+    display: block;
+  }
+</style>
+
+<!-- Overlay Element -->
+<div id="sidebar-overlay"></div>
+
+<!-- JavaScript to Toggle Sidebar and Overlay -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const sidebarToggle = document.getElementById("mobile-toggle");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebar-overlay");
+
+    if (!sidebarToggle || !sidebar || !overlay) {
+      console.error("One or more elements not found:", {
+        sidebarToggle,
+        sidebar,
+        overlay
+      });
+      return;
+    }
+
+    // Log when the DOM is fully loaded and event listeners are set
+    console.log("DOM fully loaded, event listeners are set.");
+
+    // Toggle sidebar and overlay visibility
+    sidebarToggle.addEventListener("click", function (event) {
+      event.preventDefault();
+      console.log("Sidebar toggle clicked.");
+      sidebar.classList.toggle("open");
+      overlay.classList.toggle("show");
+    });
+
+    // Close sidebar when overlay is clicked
+    overlay.addEventListener("click", function () {
+      console.log("Overlay clicked.");
+      sidebar.classList.remove("open");
+      overlay.classList.remove("show");
+    });
+  });
+</script>

@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="../assets/css/plugins/jsvectormap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.19.3/apexcharts.min.css">
   @@include('../layouts/head-css.html')
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     .bg-grd-primary {
       background: linear-gradient(135deg, #007bff, #0056b3);
@@ -128,8 +129,6 @@
         </div>
       </div>
 
-
-
       <!-- Row 4: Department Well-being Cards -->
       <div class="row">
         <div class="col-md-3">
@@ -193,6 +192,9 @@
   </div>
   <!-- [ Main Content ] end -->
   @@include('../layouts/footer-block.html') 
+
+  <!-- Include App.js -->
+  <script src="./app.js"></script>
 
   <!-- [Page Specific JS] start -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.19.3/apexcharts.min.js"></script>
@@ -261,9 +263,7 @@
       colors: ['#dc3545', '#ffc107', '#007bff', '#28a745', '#6c757d']
     };
     new ApexCharts(document.querySelector("#burnout-level-chart"), burnoutOptions).render();
-
   </script>
 </body>
 <!-- [Body] end -->
-
 </html>

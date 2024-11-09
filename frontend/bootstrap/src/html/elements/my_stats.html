@@ -76,6 +76,10 @@
                 <strong>Collaborative Team Approach</strong>
                 <div class="feedback-description">Active participation in inter-departmental collaboration, indicating a strong team-oriented approach.</div>
               </li>
+              <li class="feedback-item positive-feedback">
+                <strong>Positive Feedback Response</strong>
+                <div class="feedback-description">Timely and constructive feedback responses, contributing to effective team communication.</div>
+              </li>
             </ul>
           </div>
           
@@ -94,12 +98,16 @@
                 <strong>Stress Management</strong>
                 <div class="feedback-description">Moderate stress levels observed; consider utilizing stress management resources to maintain well-being.</div>
               </li>
+              <li class="feedback-item negative-feedback">
+                <strong>Goal Tracking</strong>
+                <div class="feedback-description">Inconsistent goal tracking; establish a more structured approach to personal goal setting and monitoring.</div>
+              </li>
             </ul>
           </div>
         </div>
       </div>
 
-      <!-- Row 1: Weekly Activity, Task Completion, Meetings Participation -->
+      <!-- Row 1: Weekly Activity, Meetings Participation, Personal Goal Tracking (Single Row) -->
       <div class="row">
         <!-- Weekly Activity Chart -->
         <div class="col-md-4">
@@ -109,18 +117,6 @@
             </div>
             <div class="card-body">
               <div id="weekly-activity-chart" style="height: 200px;"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tasks Completed -->
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-header">
-              <h5>Tasks Completed</h5>
-            </div>
-            <div class="card-body">
-              <div id="tasks-completed-chart" style="height: 200px;"></div>
             </div>
           </div>
         </div>
@@ -136,30 +132,15 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Row 2: Learning Progress and Personal Goal Tracking -->
-      <div class="row">
-        <!-- Learning Progress -->
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-header">
-              <h5>Learning Progress</h5>
-            </div>
-            <div class="card-body">
-              <div id="learning-progress-chart" style="height: 250px;"></div>
-            </div>
-          </div>
-        </div>
 
         <!-- Personal Goal Tracking -->
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div class="card">
             <div class="card-header">
               <h5>Personal Goal Tracking</h5>
             </div>
             <div class="card-body">
-              <div id="goal-tracking-chart" style="height: 250px;"></div>
+              <div id="goal-tracking-chart" style="height: 200px;"></div>
             </div>
           </div>
         </div>
@@ -207,23 +188,13 @@
     };
     new ApexCharts(document.querySelector("#meetings-participated-chart"), meetingsParticipationOptions).render();
 
-    // Learning Progress Chart
-    var learningProgressOptions = {
-      series: [65], // Example data: 65% progress in learning
-      chart: { type: 'radialBar', height: 250 },
-      plotOptions: { radialBar: { hollow: { size: '70%' } } },
-      labels: ['Progress'],
-      colors: ['#6f42c1']
-    };
-    new ApexCharts(document.querySelector("#learning-progress-chart"), learningProgressOptions).render();
-
     // Personal Goal Tracking Chart
     var goalTrackingOptions = {
       series: [{
         name: 'Goals Achieved',
         data: [60, 70, 80, 90] // Example data for four goals
       }],
-      chart: { type: 'bar', height: 250 },
+      chart: { type: 'bar', height: 200 },
       xaxis: { categories: ['Goal 1', 'Goal 2', 'Goal 3', 'Goal 4'] },
       colors: ['#dc3545']
     };

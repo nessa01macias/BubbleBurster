@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Company Health Tracker</title>
+    <style>
+      /* Basic layout styles */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      h2 {
+        color: #333;
+      }
+      .section {
+        margin-bottom: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Company Health Tracker</h1>
+
+    <!-- Feedback Form -->
+    <div class="section" id="feedback-form">
+      <h2>Submit Feedback</h2>
+      <label for="feedback-department">Department:</label>
+      <select id="feedback-department">
+        <option value="IT">IT</option>
+        <option value="HR">HR</option>
+        <option value="Marketing">Marketing</option>
+        <option value="Sales">Sales</option>
+        <option value="Operations">Operations</option>
+        <option value="Top Management">Top Management</option>
+      </select>
+      <br />
+      <input
+        type="text"
+        id="feedback-content"
+        placeholder="Enter feedback here"
+      />
+      <button onclick="submitFeedback()">Submit Feedback</button>
+    </div>
+
+    <!-- Top Issues -->
+    <div class="section" id="top-issues">
+      <h2>Top Issues</h2>
+      <ul id="top-issues-list"></ul>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="section" id="chatbot">
+      <h2>Chat with Our Bot</h2>
+      <div id="chatbox"></div>
+      <input type="text" id="chat-input" placeholder="Ask something..." />
+      <button onclick="sendToChatbot()">Send</button>
+    </div>
+
+    <!-- Homepage (Graphs and Statistics) -->
+    <div class="section" id="homepage">
+      <h2>Homepage Statistics</h2>
+      <div id="statistics"></div>
+    </div>
+
+    <!-- Progress Tracking with Department Filter -->
+    <div class="section" id="progress-tracking">
+      <h2>Progress Tracking</h2>
+      <label for="progress-department-filter">Filter by Department:</label>
+      <select id="progress-department-filter" onchange="displayProgress()">
+        <option value="all">All</option>
+        <option value="IT">IT</option>
+        <option value="HR">HR</option>
+        <option value="Marketing">Marketing</option>
+        <option value="Sales">Sales</option>
+        <option value="Operations">Operations</option>
+        <option value="Top Management">Top Management</option>
+      </select>
+      <ul id="progress-list"></ul>
+    </div>
+
+    <!-- Settings and Visibility -->
+    <div class="section" id="settings">
+      <h2>Settings</h2>
+      <label>
+        Visibility:
+        <select id="visibility-option">
+          <option value="company-wide">Company-wide</option>
+          <option value="department-wide">Department-wide</option>
+          <option value="restricted">Restricted</option>
+        </select>
+      </label>
+      <button onclick="updateVisibility()">Update Visibility</button>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

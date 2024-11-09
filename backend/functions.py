@@ -76,6 +76,7 @@ def classify_input(content: str, categories: dict) -> dict:
     Categories: 
     {categories}
     3. Select a sentiment, either positive or negative, based on the overall tone of the content.
+    4. Generate a brief and informative summary title for the following feedback content:
 
     Content:
     {json.dumps(content, indent=2)}
@@ -83,7 +84,8 @@ def classify_input(content: str, categories: dict) -> dict:
     Response Format:
     {{
         "category": "chosen category",
-        "sentiment": "positive/negative"
+        "sentiment": "positive/negative",
+        "summary": "short title of the issue"
     }}
     """
 

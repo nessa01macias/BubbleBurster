@@ -41,9 +41,9 @@ def classify_feedback():
     # Ensure response is a dictionary, not a string
     print("User input:", content, "Response:", response)  # This should be a dictionary
 
-
     # Return the category and sentiment as JSON
     return jsonify(response)
+
 
 @app.route('/get_chat_response', methods=['POST'])
 def get_chat_response():

@@ -119,17 +119,9 @@
           <div class="filter-section">
             <select id="department-filter">
               <option value="all">All Departments</option>
-              <option value="Sales">Sales</option>
-              <option value="Marketing">Marketing</option>
-              <option value="HR">HR</option>
-              <option value="IT">IT</option>
             </select>
             <select id="issue-type-filter">
-              <option value="all">All Issue Types</option>
-              <option value="burnout">Burnout</option>
-              <option value="feedback">Feedback Response</option>
-              <option value="stress">Stress</option>
-              <option value="collaboration">Collaboration</option>
+              <option value="all">All Categories</option>
             </select>
             <input type="text" id="search" placeholder="Search issues..." />
           </div>
@@ -155,9 +147,34 @@
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
+        populateFilters();
         displayTopIssues();
         displayPaginatedIssues();
       });
+
+      function populateFilters() {
+        const issues = JSON.parse(localStorage.getItem('issues'));
+        const categories = JSON.parse(localStorage.getItem('categories'));
+
+        // Populate department filter with unique departments from issues
+        const departmentSet = new Set(issues.map((issue) => issue.department));
+        const departmentFilter = document.getElementById('department-filter');
+        departmentSet.forEach((department) => {
+          const option = document.createElement('option');
+          option.value = department;
+          option.textContent = department;
+          departmentFilter.appendChild(option);
+        });
+
+        // Populate issue-type filter with unique categories from categories object
+        const categoryFilter = document.getElementById('issue-type-filter');
+        Object.keys(categories).forEach((category) => {
+          const option = document.createElement('option');
+          option.value = category;
+          option.textContent = categories[category].name;
+          categoryFilter.appendChild(option);
+        });
+      }
 
       // Function to Display Top Issues with Most Urgent Categories at the Top
       function displayTopIssues() {
@@ -270,14 +287,46 @@
         }).join('');
       }
 
-      // Event Listeners for Filters and Search (Placeholder)
+      function filterIssues() {
+        const departmentFilterValue = document.getElementById('department-filter').value;
+        const categoryFilterValue = document.getElementById('issue-type-filter').value;
+        const searchQuery = document.getElementById('search').value.toLowerCase();
+
+        const issues = JSON.parse(localStorage.getItem('issues'));
+
+        // Apply filters and search
+        const filteredIssues = issues.filter((issue) => {
+          const matchesDepartment = departmentFilterValue === 'all' || issue.department === departmentFilterValue;
+          const matchesCategory = categoryFilterValue === 'all' || issue.category === categoryFilterValue;
+          const matchesSearch = issue.summary.toLowerCase().includes(searchQuery) || issue.content.toLowerCase().includes(searchQuery);
+
+          return matchesDepartment && matchesCategory && matchesSearch;
+        });
+
+        displayFilteredIssues(filteredIssues);
+      }
+
+      // Display issues based on filter and search results
+      function displayFilteredIssues(filteredIssues) {
+        const issuesList = document.getElementById('issues-list');
+        issuesList.innerHTML = filteredIssues
+          .map(
+            (issue) => `
+                <div class="issue-card">
+                    <h5>${issue.summary}</h5>
+                    <p>${issue.content}</p>
+                    <p><strong>Department:</strong> ${issue.department}</p>
+                    <p><strong>Category:</strong> ${issue.category}</p>
+                </div>
+                `
+          )
+          .join('');
+      }
+
+      // Event listeners for filters and search
       document.getElementById('department-filter').addEventListener('change', filterIssues);
       document.getElementById('issue-type-filter').addEventListener('change', filterIssues);
       document.getElementById('search').addEventListener('input', filterIssues);
-
-      function filterIssues() {
-        // Implement filtering based on department, issue type, or search input
-      }
     </script>
   </body>
 

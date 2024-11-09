@@ -1,132 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- [Head] start -->
 
 <head>
-  @@include('../layouts/head-page-meta.html', {'title': 'Privacy settings'}) @@include('../layouts/head-css.html')
+  @@include('../layouts/head-page-meta.html', {'title': 'Privacy Settings'})
+  @@include('../layouts/head-css.html')
+  <style>
+    /* Styling for the settings page */
+    .settings-card {
+      background: #f8f9fa;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(51, 43, 43, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .settings-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .settings-title {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: #343a40;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .form-check-label {
+      font-size: 1.1em;
+      color: #495057;
+      cursor: pointer;
+    }
+
+    .form-check-input {
+      transform: scale(1.3);
+      cursor: pointer;
+    }
+
+    /* Tooltip styling */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 180px;
+      background-color: #000;
+      color: #fff;
+      text-align: center;
+      border-radius: 5px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -90px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 0.9;
+    }
+
+    /* Button to save settings */
+    .save-btn {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s;
+    }
+
+    .save-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
-<!-- [Head] end -->
-<!-- [Body] Start -->
 
 <body @@bodySetup>
   @@include('../layouts/layout-vertical.html')
 
-
-  <!-- npm install bubbly-bg -->
-  <!-- npm install bubbly-bg -->
-  <script src="https://cdn.jsdelivr.net/npm/bubbly-bg@1.0.0/dist/bubbly-bg.js"></script>
-  <script>bubbly({
-    colorStart: "#ffffff",
-    colorStop: "#bed9f8",
-    canvas: document.querySelector("#background"), // default is created and attached automatically
-    compose: "lighter", // default is "lighter"
-    animate: true, // default is true
-    bubbles: Math.random() * 100, // default is Math.floor((canvas.width + canvas.height) * 0.02);
-    shadowColor: "#a1c6d1", // default is #fff
-    shadowBlur: 1, // default is 4
-    fillFunc: () => `hsla(${Math.random() * 360}, 100%, 50%, ${Math.random() * 0.25})`, // default is () => `hsla(0, 0%, 100%, ${r() * 0.1})`)
-    angleFunc: () => Math.random() * Math.PI * 2, // default is this
-    velocityFunc: () => 1.5 + Math.random() * 1.5, // default is this
-    radiusFunc: () => 9 + Math.random() * 25 // default is 4 + Math.random() * width / 25
-  });
-  </script>
-  <!-- npm install bubbly-bg -->
-  <!-- npm install bubbly-bg -->
-
-
-  <!-- [ Main Content ] start -->
+  <!-- Main Content Start -->
   <div class="pc-container">
     <div class="pc-content">
-      @@include('../layouts/breadcrumb.html', {'breadcrumb-item': 'Settings', 'breadcrumb-item-active': 'Privacy setting'})
+      <div class="container my-5 w-50">
+        <h2 class="text-center">Privacy Settings</h2>
 
-      <!-- [ Main Content ] start -->
-      <div class="row">
-        <!-- [ Color ] start -->
-        <div class="col-sm-12">
-          <div class="card">
-            <div class="card-header">
-              <h5>Show summaries based on my data to</h5>
-            </div>
-            <div class="card-body">
-<div class="row gy-4">
-<div class="form-check form-switch">
-  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked1" checked>
-  <label class="form-check-label" for="flexSwitchCheckChecked1">Own team</label>
-</div>
-  <div class="form-check form-switch">
-  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked2" checked>
-  <label class="form-check-label" for="flexSwitchCheckChecked2">Own manager</label>
-</div>
-<div class="form-check form-switch">
-  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked3" checked>
-  <label class="form-check-label" for="flexSwitchCheckChecked3">Manager's manager</label>
-</div>
-<div class="form-check form-switch">
-  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked4" checked>
-  <label class="form-check-label" for="flexSwitchCheckChecked4">Upper management</label>
-</div>
-</div>
-</div>
-            </div>
+        <!-- Privacy Settings Card -->
+        <div class="settings-card">
+          <div class="settings-title">Show Summaries Based on My Data to</div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="teamSwitch">
+            <label class="form-check-label" for="teamSwitch">Own Team</label>
+            <span class="tooltip"><i class="fas fa-info-circle"></i>
+              <span class="tooltip-text">Allow your team to view summary data.</span>
+            </span>
           </div>
-          <div class="card">
-            <div class="card-header">
-              <h5>Data collection settings</h5>
-            </div>
-            <div class="card-body">
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked5" checked>
-                <label class="form-check-label" for="flexSwitchCheckChecked5">Opt in for data collection</label>
-              </div>
-            </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="managerSwitch">
+            <label class="form-check-label" for="managerSwitch">Own Manager</label>
+            <span class="tooltip"><i class="fas fa-info-circle"></i>
+              <span class="tooltip-text">Allow your manager to view your data summaries.</span>
+            </span>
           </div>
-
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="managerManagerSwitch">
+            <label class="form-check-label" for="managerManagerSwitch">Manager's Manager</label>
+            <span class="tooltip"><i class="fas fa-info-circle"></i>
+              <span class="tooltip-text">Allow higher-level managers to access summaries.</span>
+            </span>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="upperManagementSwitch">
+            <label class="form-check-label" for="upperManagementSwitch">Upper Management</label>
+            <span class="tooltip"><i class="fas fa-info-circle"></i>
+              <span class="tooltip-text">Allow upper management access to summaries.</span>
+            </span>
+          </div>
         </div>
-        <!-- [ Color ] end -->
+
+        <!-- Data Collection Card -->
+        <div class="settings-card">
+          <div class="settings-title">Data Collection Settings</div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="dataCollectionSwitch">
+            <label class="form-check-label" for="dataCollectionSwitch">Opt-in for Data Collection</label>
+            <span class="tooltip"><i class="fas fa-info-circle"></i>
+              <span class="tooltip-text">Allow data collection to enhance personalized insights.</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="text-center">
+          <button class="save-btn" onclick="saveSettings()">Save Settings</button>
+        </div>
       </div>
-      <!-- [ Main Content ] end -->
     </div>
   </div>
-  <!-- [ Main Content ] end -->
-  @@include('../layouts/footer-block.html') @@include('../layouts/footer-js.html')
-  <script src="../assets/js/plugins/clipboard.min.js"></script>
+  <!-- Main Content End -->
+
+  @@include('../layouts/footer-block.html')
+  @@include('../layouts/footer-js.html')
+
   <script>
-    window.addEventListener('load', (event) => {
-      var i_copy = new ClipboardJS('.color-block');
-      i_copy.on('success', function (e) {
-        var targetElement = e.trigger;
-        let icon_badge = document.createElement('span');
-        icon_badge.setAttribute('class', 'ic-badge badge bg-success float-end');
-        icon_badge.innerHTML = 'copied';
-        targetElement.append(icon_badge);
-        setTimeout(function () {
-          targetElement.children[0].remove();
-        }, 3000);
-      });
+    // Load settings from localStorage
+    function loadSettings() {
+      const privacySettings = JSON.parse(localStorage.getItem("privacySettings")) || {
+        team: true,
+        manager: true,
+        managerManager: true,
+        upperManagement: true,
+        dataCollection: true
+      };
 
-      i_copy.on('error', function (e) {
-        var targetElement = e.trigger;
-        let icon_badge = document.createElement('span');
-        icon_badge.setAttribute('class', 'ic-badge badge bg-danger float-end');
-        icon_badge.innerHTML = 'Error';
-        targetElement.append(icon_badge);
-        setTimeout(function () {
-          targetElement.children[0].remove();
-        }, 3000);
-      });
-    });
-
-    
-
-    // Function to Update Visibility Settings
-    function updateVisibility() {
-      const visibilityOption = document.getElementById("visibility-option").value;
-      localStorage.setItem("visibilitySettings", JSON.stringify({ visibilityOption }));
-      alert(`Visibility updated to ${visibilityOption}`);
+      // Set initial states for each setting switch
+      document.getElementById("teamSwitch").checked = privacySettings.team;
+      document.getElementById("managerSwitch").checked = privacySettings.manager;
+      document.getElementById("managerManagerSwitch").checked = privacySettings.managerManager;
+      document.getElementById("upperManagementSwitch").checked = privacySettings.upperManagement;
+      document.getElementById("dataCollectionSwitch").checked = privacySettings.dataCollection;
     }
 
+    // Save settings to localStorage
+    function saveSettings() {
+      const privacySettings = {
+        team: document.getElementById("teamSwitch").checked,
+        manager: document.getElementById("managerSwitch").checked,
+        managerManager: document.getElementById("managerManagerSwitch").checked,
+        upperManagement: document.getElementById("upperManagementSwitch").checked,
+        dataCollection: document.getElementById("dataCollectionSwitch").checked
+      };
+      localStorage.setItem("privacySettings", JSON.stringify(privacySettings));
+
+      // Provide user feedback for saved settings
+      const saveButton = document.querySelector('.save-btn');
+      saveButton.textContent = "Settings Saved!";
+      saveButton.style.backgroundColor = "#28a745";
+
+      // Reset text after a short delay
+      setTimeout(() => {
+        saveButton.textContent = "Save Settings";
+        saveButton.style.backgroundColor = "#007bff";
+      }, 2000);
+    }
+
+    // Load settings when the page is loaded
+    window.addEventListener("load", loadSettings);
   </script>
-  
 </body>
-<!-- [Body] end -->
 </html>

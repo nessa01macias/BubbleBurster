@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Engineering Department Details</title>
+  <link rel="stylesheet" href="../assets/css/plugins/jsvectormap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.19.3/apexcharts.min.css">
+  <style>
+    /* Add any additional styling needed for department details */
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <h2>Engineering Department</h2>
+    <p>Detailed well-being and performance metrics for the Engineering team.</p>
+    
+    <div class="row">
+      <!-- Add department-specific charts and metrics here -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h5>Engineering Performance Trends</h5>
+          </div>
+          <div class="card-body">
+            <div id="engineering-performance-chart" style="height: 250px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional engineering-specific charts and data can be added similarly -->
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.19.3/apexcharts.min.js"></script>
+  <script>
+    // Engineering Performance Chart
+    var engineeringPerformanceOptions = {
+      series: [{ name: 'Performance', data: [70, 75, 80, 85, 90, 95] }],
+      chart: { type: 'line', height: 250 },
+      xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'] },
+      colors: ['#007bff']
+    };
+    new ApexCharts(document.querySelector("#engineering-performance-chart"), engineeringPerformanceOptions).render();
+  </script>
+</body>
+</html>

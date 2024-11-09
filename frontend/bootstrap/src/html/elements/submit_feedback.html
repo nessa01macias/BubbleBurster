@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- [Head] start -->
 
 <head>
     @@include('../layouts/head-page-meta.html', {'title': 'Submit feedback'}) @@include('../layouts/head-css.html')
 </head>
-<!-- [Head] end -->
-<!-- [Body] Start -->
 
 <body @@bodySetup>
 @@include('../layouts/layout-vertical.html')
@@ -14,105 +11,84 @@
 <!-- [ Main Content ] start -->
 <div class="pc-container">
     <div class="pc-content">
-<div class="container my-5 w-40">
-    <h2 class="text-center">Send Parameters</h2>
-    <form id="parameterForm">
-        <!-- Parameter Dropdown -->
-        <div class="mb-3">
-            <label for="parameterSelect" class="form-label">Choose a Parameter:</label>
-            <select class="form-select" id="parameterSelect" aria-label="Parameter Select">
-                <option value="one">One</option>
-                <option value="two">Two</option>
-                <option value="three">Three</option>
-            </select>
-        </div>
+        <div class="container my-5 w-40">
+            <h2 class="text-center">Send Parameters</h2>
+            <form id="parameterForm">
+                <!-- Additional Details Input Box -->
+                <div class="mb-3">
+                    <label for="detailsInput" class="form-label">Submit your input:</label>
+                    <textarea id="detailsInput" class="form-control" rows="4" placeholder="Start typing here..."></textarea>
+                </div>
+                <!-- Parameter Dropdown -->
+                <div class="mb-3">
+                    <label for="parameterSelect" class="form-label">Choose a Parameter:</label>
+                    <select class="form-select" id="parameterSelect" aria-label="Parameter Select">
+                        <option value="one">One</option>
+                        <option value="two">Two</option>
+                        <option value="three">Three</option>
+                    </select>
+                </div>
 
-        <!-- Tags Input -->
-        <div class="mb-3">
-            <label for="tagsInput" class="form-label">Enter Tags (comma-separated):</label>
-            <input type="text" id="tagsInput" class="form-control" placeholder="e.g., tag1, tag2, tag3">
-        </div>
+                <!-- Tags Input -->
+                <div class="mb-3">
+                    <label for="tagsInput" class="form-label">Enter Tags (comma-separated):</label>
+                    <input type="text" id="tagsInput" class="form-control" placeholder="e.g., tag1, tag2, tag3">
+                </div>
 
-        <!-- Anonymity Toggle -->
-        <div class="mb-3">
-            <label class="form-label">Anonymity:</label>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="anonymity" id="anonymityYes" value="yes">
-                <label class="form-check-label" for="anonymityYes">Yes</label>
+
+                <!-- Anonymity Toggle -->
+                <div class="mb-3">
+                    <label class="form-label">Anonymity:</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="anonymity" id="anonymityYes" value="yes">
+                        <label class="form-check-label" for="anonymityYes">Yes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="anonymity" id="anonymityNo" value="no" checked>
+                        <label class="form-check-label" for="anonymityNo">No</label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="button" class="btn btn-primary" onclick="submitForm()">Submit</button>
+            </form>
+
+            <!-- Output -->
+            <div class="mt-4">
+                <h4>Output:</h4>
+                <pre id="output" class="border p-3 bg-light"></pre>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="anonymity" id="anonymityNo" value="no" checked>
-                <label class="form-check-label" for="anonymityNo">No</label>
-            </div>
         </div>
-
-        <!-- Submit Button -->
-        <button type="button" class="btn btn-primary" onclick="submitForm()">Submit</button>
-    </form>
-
-    <!-- Output -->
-    <div class="mt-4">
-        <h4>Output:</h4>
-        <pre id="output" class="border p-3 bg-light"></pre>
-    </div>
-</div>
     </div>
 </div>
 <!-- [ Main Content ] end -->
 @@include('../layouts/footer-block.html') @@include('../layouts/footer-js.html')
 <script src="../assets/js/plugins/clipboard.min.js"></script>
 <script>
-    window.addEventListener('load', (event) => {
-        var i_copy = new ClipboardJS('.color-block');
-        i_copy.on('success', function (e) {
-            var targetElement = e.trigger;
-            let icon_badge = document.createElement('span');
-            icon_badge.setAttribute('class', 'ic-badge badge bg-success float-end');
-            icon_badge.innerHTML = 'copied';
-            targetElement.append(icon_badge);
-            setTimeout(function () {
-                targetElement.children[0].remove();
-            }, 3000);
-        });
-
-        i_copy.on('error', function (e) {
-            var targetElement = e.trigger;
-            let icon_badge = document.createElement('span');
-            icon_badge.setAttribute('class', 'ic-badge badge bg-danger float-end');
-            icon_badge.innerHTML = 'Error';
-            targetElement.append(icon_badge);
-            setTimeout(function () {
-                targetElement.children[0].remove();
-            }, 3000);
-        });
-    });
-
-    <!-- input box JS -->
-
-        function submitForm() {
+    function submitForm() {
+        // Get additional details
+        const details = document.getElementById('detailsInput').value;
         // Get selected parameter
         const parameter = document.getElementById('parameterSelect').value;
 
         // Get tags
         const tags = document.getElementById('tagsInput').value.split(',').map(tag => tag.trim()).filter(tag => tag);
 
+
         // Get anonymity choice
         const anonymity = document.querySelector('input[name="anonymity"]:checked').value;
 
         // Output the parameters
         const result = {
-        parameter: parameter,
-        tags: tags,
-        anonymity: anonymity
-    };
+            details: details,
+            parameter: parameter,
+            tags: tags,
+            anonymity: anonymity
+        };
 
         document.getElementById('output').textContent = JSON.stringify(result, null, 2);
     }
-
-
-<!-- input box js over -->
 </script>
 
 </body>
-<!-- [Body] end -->
 </html>

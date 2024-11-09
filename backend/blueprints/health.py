@@ -1,1 +1,0 @@
-# Handles company health metrics

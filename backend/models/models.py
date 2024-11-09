@@ -1,1 +1,0 @@
-  # Defines database models and schemas

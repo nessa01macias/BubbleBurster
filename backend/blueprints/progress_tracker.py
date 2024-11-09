@@ -1,1 +1,0 @@
-# Tracks issue progress and management actions

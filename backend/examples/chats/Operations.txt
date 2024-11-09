@@ -1,0 +1,17 @@
+Person 1 - Operations Manager
+"This quarter, let’s focus on being more proactive with logistics and supplier relationships."
+
+Person 2 - Supply Chain Specialist
+"Got it! Does this mean we’re reaching out to suppliers more frequently, or adjusting our inventory processes?"
+
+Person 1 - Operations Manager
+"Both, really. Just ensure we’re not missing any opportunities to optimize."
+
+Person 3 - Procurement Analyst
+"So should I focus on negotiating better terms, or improving our ordering process?"
+
+Person 1 - Operations Manager
+"Yes, both are important. Just make sure we’re staying ahead."
+
+Person 2 - Supply Chain Specialist
+"It’s hard to ‘just stay ahead’ without specific targets. Can we define some concrete metrics?"

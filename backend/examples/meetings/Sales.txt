@@ -1,0 +1,20 @@
+Sales Director
+"Alright team, this quarter, we need to increase our close rates by 20%. Focus on high-value clients."
+
+Sales Rep
+"Does that mean we’re focusing on existing clients, or should we also be reaching out to new prospects?"
+
+Sales Director
+"Both. Just make sure you’re pushing to hit that close rate goal."
+
+Account Manager
+"Are we prioritizing follow-ups with current clients, or should we be focusing on expanding outreach?"
+
+Sales Director
+"Honestly, it’s all important. I trust you to figure out the best approach."
+
+Sales Rep
+"That’s hard to balance without specifics. Should we have separate goals for new and existing clients?"
+
+Sales Director
+"Just focus on closing deals, wherever they come from."

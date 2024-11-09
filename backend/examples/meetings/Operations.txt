@@ -1,0 +1,20 @@
+Operations Manager
+"This month, we need to streamline our inventory management. Let’s aim for quicker turnover."
+
+Warehouse Supervisor
+"Does that mean we’re ordering less stock, or should we adjust our storage process?"
+
+Operations Manager
+"Both. Just make it more efficient across the board."
+
+Supply Chain Analyst
+"Should I focus on adjusting reorder points or finding new suppliers?"
+
+Operations Manager
+"Yes, anything that helps with turnover. Just make it faster."
+
+Warehouse Supervisor
+"Without clear steps, it’s hard to know where to start. Should we prioritize one area for faster results?"
+
+Operations Manager
+"Figure out what will have the most impact and go from there."

@@ -1,0 +1,20 @@
+Person 1 - HR Manager
+"For our next training session, let’s approach it from a high-level perspective to make it more impactful."
+
+Person 2 - HR Specialist
+"Could you clarify what you mean by high-level? Should we skip the detailed sections and focus on the key points?"
+
+Person 1 - HR Manager
+"Yes, keep it simple. We don’t want to overwhelm attendees with too much information."
+
+Person 3 - Training Coordinator, HR Department
+"Does that mean I should skip the case studies and just stick to basics?"
+
+Person 1 - HR Manager
+"No, don’t skip them entirely! Just… you know, keep it high level."
+
+Person 2 - HR Specialist
+"I’m still unclear. Should we reduce the examples or keep everything but in a condensed form?"
+
+Person 1 - HR Manager
+"Just make it engaging without going too deep. We can add details in follow-up sessions."

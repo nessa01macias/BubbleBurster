@@ -22,59 +22,28 @@
       left: 0;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 1.1em;
-      color: #007bff;
       text-decoration: none;
       display: flex;
       align-items: center;
       gap: 5px;
-    }
-    .header-section h2 {
-      font-weight: 700;
-      font-size: 2.5em;
-      color: #2b2b2b;
-      margin: 0;
-    }
-    .header-section p {
-      color: #6c757d;
-      font-size: 1.1em;
-      margin: 10px 0 0;
     }
     .metric-cards {
       display: flex;
       gap: 20px;
       margin-bottom: 30px;
       flex-wrap: wrap;
-      justify-content: center;
     }
     .card {
       flex: 1;
+      min-width: 200px;
       background: #ffffff;
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      min-width: 200px;
       transition: transform 0.2s;
     }
     .card:hover {
       transform: translateY(-5px);
-    }
-    .card h6 {
-      font-size: 1em;
-      font-weight: 500;
-      color: #6c757d;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .card h2 {
-      font-size: 2.2em;
-      font-weight: 700;
-      color: #2b2b2b;
-      margin: 0;
     }
     .chart-section {
       display: flex;
@@ -83,191 +52,462 @@
       margin-top: 20px;
     }
     .chart-card {
-      flex: 1;
+      flex: 1 1 calc(50% - 20px);
+      min-width: 300px;
       background: #ffffff;
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s;
-    }
-    .chart-card:hover {
-      transform: translateY(-5px);
     }
     .chart-card h5 {
-      font-size: 1.2em;
-      color: #2b2b2b;
-      font-weight: 500;
       margin-bottom: 15px;
       text-align: center;
     }
-    .icon {
-      font-size: 1.2em;
-      color: #ffc107;
+    /* Styling for metric cards */
+    .metric-card h6 {
+      color: #6c757d;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
+    .metric-card h2 {
+      font-size: 2em;
+      margin: 0;
+    }
+    .metric-card small {
+      color: #6c757d;
+      font-size: 0.8em;
+    }
+    .high { color: #28a745; }
+    .medium { color: #ffc107; }
+    .low { color: #dc3545; }
   </style>
 </head>
-<!-- [Head] end -->
 
-<!-- [Body] Start -->
 <body @@bodySetup>
-  @@include('../layouts/layout-vertical.html')
+@@include('../layouts/layout-vertical.html')
 
-
-  <!-- npm install bubbly-bg -->
-  <!-- npm install bubbly-bg -->
-  <script src="https://cdn.jsdelivr.net/npm/bubbly-bg@1.0.0/dist/bubbly-bg.js"></script>
-  <script>bubbly({
-    colorStart: "#ffffff",
-    colorStop: "#bed9f8",
-    canvas: document.querySelector("#background"), // default is created and attached automatically
-    compose: "lighter", // default is "lighter"
-    animate: true, // default is true
-    bubbles: Math.random() * 100, // default is Math.floor((canvas.width + canvas.height) * 0.02);
-    shadowColor: "#a1c6d1", // default is #fff
-    shadowBlur: 1, // default is 4
-    fillFunc: () => `hsla(${Math.random() * 360}, 100%, 50%, ${Math.random() * 0.25})`, // default is () => `hsla(0, 0%, 100%, ${r() * 0.1})`)
-    angleFunc: () => Math.random() * Math.PI * 2, // default is this
-    velocityFunc: () => 1.5 + Math.random() * 1.5, // default is this
-    radiusFunc: () => 9 + Math.random() * 25 // default is 4 + Math.random() * width / 25
-  });
-  </script>
-  <!-- npm install bubbly-bg -->
-  <!-- npm install bubbly-bg -->
-
-
-  <div class="pc-container">
-    <div class="pc-content">
-      
-      <div class="container">
-        
-        <!-- Header Section with Back Button -->
-        <div class="header-section">
-          <a href="index.html" class="back-button">
-            &#8592; Back
-          </a>
-          <h2>IT Department</h2>
-          <p>Detailed insights into the well-being, performance, and collaboration of the IT team.</p>
-        </div>
-        
-        <!-- Metric Cards Section -->
-        <div class="metric-cards">
-          <div class="card">
-            <h6><i class="icon">&#128522;</i> Satisfaction Rate</h6>
-            <h2>85%</h2>
-          </div>
-          <div class="card">
-            <h6><i class="icon">&#128101;</i> Team Collaboration</h6>
-            <h2>78%</h2>
-          </div>
-          <div class="card">
-            <h6><i class="icon">&#128172;</i> Feedback Response</h6>
-            <h2>92%</h2>
-          </div>
-          <div class="card">
-            <h6><i class="icon">&#128679;</i> Stress Level</h6>
-            <h2>25%</h2>
-          </div>
-        </div>
-        
-        <!-- Chart Section -->
-        <div class="chart-section">
-          
-          <!-- Performance Trends Chart -->
-          <div class="chart-card">
-            <h5>Performance Trends</h5>
-            <div id="performance-trends-chart" style="height: 250px;"></div>
-          </div>
-          
-          <!-- Stress Levels Chart (Increased Size) -->
-          <div class="chart-card">
-            <h5>Stress Levels</h5>
-            <div id="stress-levels-chart" style="height: 300px;"></div>
-          </div>
-          
-          <!-- Collaboration Breakdown Chart -->
-          <div class="chart-card">
-            <h5>Collaboration Breakdown</h5>
-            <div id="collaboration-breakdown-chart" style="height: 250px;"></div>
-          </div>
-          
-          <!-- Feedback Response Rate (Adjusted Text Position) -->
-          <div class="chart-card">
-            <h5>Feedback Response Rate</h5>
-            <div id="feedback-response-chart" style="height: 300px;"></div>
-          </div>
-          
-        </div>
-
+<div class="pc-container">
+  <div class="pc-content">
+    <div class="container">
+      <!-- Header Section -->
+      <div class="header-section">
+        <a href="index.html" class="back-button">
+          <i class="feather icon-arrow-left"></i> Back to Overview
+        </a>
+        <h2>IT Department Dashboard</h2>
+        <p>Monitoring team well-being and feedback metrics</p>
       </div>
 
+      <!-- Metric Cards -->
+      <div class="metric-cards">
+        <div class="card metric-card">
+          <h6><i class="feather icon-smile"></i> Team Satisfaction</h6>
+          <h2 data-metric="satisfaction">--%</h2>
+          <small>Based on positive feedback</small>
+        </div>
+        <div class="card metric-card">
+          <h6><i class="feather icon-activity"></i> Monthly Activity</h6>
+          <h2 data-metric="activity">--</h2>
+          <small>Issues this month</small>
+        </div>
+        <div class="card metric-card">
+          <h6><i class="feather icon-message-circle"></i> Response Rate</h6>
+          <h2 data-metric="response">--%</h2>
+          <small>Issues addressed</small>
+        </div>
+        <div class="card metric-card">
+          <h6><i class="feather icon-alert-triangle"></i> Risk Level</h6>
+          <h2 data-metric="stress">--%</h2>
+          <small>Based on negative feedback</small>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="chart-section">
+        <!-- Overall Mood -->
+        <div class="chart-card">
+          <h5>Department Mood Trend</h5>
+          <div id="mood-thermometer" style="height: 300px;"></div>
+        </div>
+
+        <!-- Department Health -->
+        <div class="chart-card">
+          <h5>Overall Department Health</h5>
+          <div id="health-gauge" style="height: 300px;"></div>
+        </div>
+
+        <!-- Feedback Response Rate -->
+        <div class="chart-card">
+          <h5>Feedback Categories</h5>
+          <div id="feedback-rate-chart" style="height: 300px;"></div>
+        </div>
+
+        <!-- Satisfaction Over Time -->
+        <div class="chart-card">
+          <h5>Monthly Satisfaction Trend</h5>
+          <div id="satisfaction-chart" style="height: 300px;"></div>
+        </div>
+
+        <!-- Category Distribution -->
+        <div class="chart-card">
+          <h5>Issue Categories</h5>
+          <div id="collaboration-chart" style="height: 300px;"></div>
+        </div>
+
+        <!-- Risk Levels -->
+        <div class="chart-card">
+          <h5>Risk Areas</h5>
+          <div id="burnout-level-chart" style="height: 300px;"></div>
+        </div>
+      </div>
     </div>
   </div>
-  
-  @@include('../layouts/footer-block.html') 
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.19.3/apexcharts.min.js"></script>
-  <script>
-    // Performance Trends Line Chart
-    var performanceTrendsOptions = {
-      series: [{ name: 'Performance', data: [70, 75, 80, 85, 88, 92, 95] }],
-      chart: { type: 'line', height: 250 },
-      xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'] },
-      colors: ['#007bff'],
-      stroke: { width: 2, curve: 'smooth' },
-      tooltip: { theme: 'light' }
-    };
-    new ApexCharts(document.querySelector("#performance-trends-chart"), performanceTrendsOptions).render();
+</div>
 
-    // Stress Levels Pie Chart (Increased Size)
-    var stressLevelsOptions = {
-      series: [25, 30, 20, 15, 10],
-      chart: { type: 'pie', height: 300 },
-      labels: ['High', 'Moderate', 'Low', 'Very Low', 'Minimal'],
-      colors: ['#dc3545', '#ffc107', '#28a745', '#007bff', '#6c757d'],
-      legend: {
-        position: 'bottom',
-        fontSize: '14px'
-      }
-    };
-    new ApexCharts(document.querySelector("#stress-levels-chart"), stressLevelsOptions).render();
+@@include('../layouts/footer-block.html')
 
-    // Collaboration Breakdown Bar Chart
-    var collaborationBreakdownOptions = {
-      series: [{ name: 'Collaboration', data: [50, 60, 70, 40, 80] }],
-      chart: { type: 'bar', height: 250 },
-      xaxis: { categories: ['Project A', 'Project B', 'Project C', 'Project D', 'Project E'] },
-      colors: ['#28a745'],
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '60%',
-          endingShape: 'rounded'
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.19.3/apexcharts.min.js"></script>
+<script>
+  function updateDepartmentDashboard(department = 'IT') {
+    // Clear existing charts
+    document.querySelectorAll('[id$="-chart"]').forEach(chart => {
+      chart.innerHTML = '';
+    });
+
+    const issues = JSON.parse(localStorage.getItem('issues')) || [];
+    const progressTracker = JSON.parse(localStorage.getItem('progressTracker')) || [];
+
+    // Filter for department
+    const deptIssues = issues.filter(i => i.department === department);
+    const deptProgress = progressTracker.filter(p => p.department === department);
+
+    // Calculate metrics
+    const metrics = {
+      satisfaction: deptIssues.length > 0
+              ? Math.round((deptIssues.filter(i => i.sentiment === 'positive').length / deptIssues.length) * 100)
+              : 0,
+      activity: deptIssues.filter(issue => {
+        const issueDate = new Date(issue.date);
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        return issueDate >= thirtyDaysAgo;
+      }).length,
+      response: deptProgress.length > 0
+              ? Math.round((deptProgress.filter(p => p.actionsTaken.length > 0).length / deptProgress.length) * 100)
+              : 0,
+      stress: deptIssues.length > 0
+              ? Math.round((deptIssues.filter(i => i.sentiment === 'negative').length / deptIssues.length) * 100)
+              : 0
+    };
+
+    // Update metric cards
+    ['satisfaction', 'activity', 'response', 'stress'].forEach(metric => {
+      const element = document.querySelector(`[data-metric="${metric}"]`);
+      if (element) {
+        element.textContent = metric === 'activity' ? metrics[metric] : `${metrics[metric]}%`;
+        element.className = ''; // Reset classes
+        if (metric === 'stress') {
+          element.classList.add(metrics[metric] > 70 ? 'low' : metrics[metric] > 40 ? 'medium' : 'high');
+        } else if (metric !== 'activity') {
+          element.classList.add(metrics[metric] > 70 ? 'high' : metrics[metric] > 40 ? 'medium' : 'low');
         }
-      },
-      dataLabels: { enabled: false }
-    };
-    new ApexCharts(document.querySelector("#collaboration-breakdown-chart"), collaborationBreakdownOptions).render();
+      }
+    });
 
-    // Feedback Response Rate Gauge Chart (Adjusted Text Position)
-    var feedbackResponseOptions = {
-      series: [92],
-      chart: { type: 'radialBar', height: 300 },
-      plotOptions: {
-        radialBar: {
-          hollow: { size: '70%' },
-          dataLabels: {
-            value: { fontSize: '28px', offsetY: -5 },
-            name: { offsetY: 25, fontSize: '14px' }
+    // Render all charts with the calculated data
+    renderDepartmentCharts(department, deptIssues, metrics);
+  }
+
+  // Add this inside your script tags, after the updateDepartmentDashboard function
+
+    function renderDepartmentCharts(department, deptIssues, metrics) {
+      // Helper function to get last 6 months
+      function getLastSixMonths() {
+        const months = [];
+        const currentDate = new Date();
+        for (let i = 5; i >= 0; i--) {
+          const d = new Date();
+          d.setMonth(currentDate.getMonth() - i);
+          months.push(d.toLocaleString('default', { month: 'short' }));
+        }
+        return months;
+      }
+
+      // Helper function to get monthly data
+      function getMonthlyData(issues) {
+        const months = getLastSixMonths();
+        return months.map(month => {
+          const monthIssues = issues.filter(issue => {
+            const issueDate = new Date(issue.date);
+            return issueDate.toLocaleString('default', { month: 'short' }) === month;
+          });
+          return monthIssues.length > 0
+                  ? Math.round((monthIssues.filter(i => i.sentiment === 'positive').length / monthIssues.length) * 100)
+                  : 0;
+        });
+      }
+
+      // 1. Department Mood Trend Chart
+      var moodOptions = {
+        series: [metrics.satisfaction],
+        chart: {
+          height: 300,
+          type: 'radialBar',
+          toolbar: { show: false }
+        },
+        plotOptions: {
+          radialBar: {
+            startAngle: -135,
+            endAngle: 135,
+            hollow: {
+              margin: 0,
+              size: '70%'
+            },
+            track: {
+              background: '#e7e7e7',
+              strokeWidth: '97%',
+              margin: 5
+            },
+            dataLabels: {
+              name: {
+                show: true,
+                fontSize: '16px',
+                offsetY: -10
+              },
+              value: {
+                show: true,
+                fontSize: '24px',
+                offsetY: 0,
+                formatter: function(val) {
+                  return val + '%';
+                }
+              }
+            }
+          }
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shade: 'dark',
+            type: 'horizontal',
+            shadeIntensity: 0.5,
+            gradientToColors: ['#ABE5A1'],
+            inverseColors: true,
+            opacityFrom: 1,
+            opacityTo: 1,
+            stops: [0, 100]
+          }
+        },
+        stroke: {
+          lineCap: 'round'
+        },
+        labels: ['Team Mood']
+      };
+      new ApexCharts(document.querySelector("#mood-thermometer"), moodOptions).render();
+
+      // 2. Department Health Gauge
+      var healthOptions = {
+        series: [100 - metrics.stress], // Inverse of stress level
+        chart: {
+          height: 300,
+          type: 'radialBar',
+          toolbar: { show: false }
+        },
+        plotOptions: {
+          radialBar: {
+            startAngle: -90,
+            endAngle: 90,
+            track: {
+              background: "#e7e7e7",
+              strokeWidth: '97%',
+              margin: 5,
+              dropShadow: {
+                enabled: true,
+                top: 2,
+                left: 0,
+                opacity: 0.31,
+                blur: 2
+              }
+            },
+            dataLabels: {
+              name: {
+                show: true,
+                fontSize: '16px',
+                offsetY: -10
+              },
+              value: {
+                show: true,
+                fontSize: '24px',
+                offsetY: -2,
+                formatter: function(val) {
+                  return val + '%';
+                }
+              }
+            }
+          }
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shade: 'light',
+            type: 'horizontal',
+            shadeIntensity: 0.5,
+            gradientToColors: ['#00B5B5'],
+            inverseColors: true,
+            opacityFrom: 1,
+            opacityTo: 1,
+            stops: [0, 100]
+          }
+        },
+        labels: ['Department Health']
+      };
+      new ApexCharts(document.querySelector("#health-gauge"), healthOptions).render();
+
+      // 3. Feedback Categories Distribution
+      const categories = {};
+      deptIssues.forEach(issue => {
+        categories[issue.category] = (categories[issue.category] || 0) + 1;
+      });
+
+      var feedbackOptions = {
+        series: Object.values(categories),
+        chart: {
+          height: 300,
+          type: 'pie',
+          toolbar: { show: false }
+        },
+        labels: Object.keys(categories),
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: { width: 200 },
+            legend: { position: 'bottom' }
+          }
+        }]
+      };
+      new ApexCharts(document.querySelector("#feedback-rate-chart"), feedbackOptions).render();
+
+      // 4. Monthly Satisfaction Trend
+      const monthlyData = getMonthlyData(deptIssues);
+      var satisfactionOptions = {
+        series: [{
+          name: 'Satisfaction',
+          data: monthlyData
+        }],
+        chart: {
+          height: 300,
+          type: 'line',
+          toolbar: { show: false }
+        },
+        stroke: {
+          width: 3,
+          curve: 'smooth'
+        },
+        xaxis: {
+          categories: getLastSixMonths()
+        },
+        yaxis: {
+          max: 100,
+          labels: {
+            formatter: function(val) {
+              return val + '%';
+            }
+          }
+        },
+        markers: {
+          size: 4,
+          strokeColors: '#fff',
+          strokeWidth: 2,
+          hover: { size: 7 }
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shade: 'dark',
+            gradientToColors: ['#FDD835'],
+            shadeIntensity: 1,
+            type: 'horizontal',
+            opacityFrom: 1,
+            opacityTo: 1,
+            stops: [0, 100, 100, 100]
           }
         }
-      },
-      labels: ['Response Rate'],
-      colors: ['#ffc107']
-    };
-    new ApexCharts(document.querySelector("#feedback-response-chart"), feedbackResponseOptions).render();
-  </script>
+      };
+      new ApexCharts(document.querySelector("#satisfaction-chart"), satisfactionOptions).render();
 
+      // 5. Issue Categories (Bar Chart)
+      var categoryOptions = {
+        series: [{
+          name: 'Issues',
+          data: Object.values(categories)
+        }],
+        chart: {
+          height: 300,
+          type: 'bar',
+          toolbar: { show: false }
+        },
+        plotOptions: {
+          bar: {
+            borderRadius: 4,
+            horizontal: true,
+          }
+        },
+        dataLabels: { enabled: false },
+        xaxis: {
+          categories: Object.keys(categories),
+        }
+      };
+      new ApexCharts(document.querySelector("#collaboration-chart"), categoryOptions).render();
+
+      // 6. Risk Areas (Sentiment by Category)
+      const riskByCategory = {};
+      Object.keys(categories).forEach(category => {
+        const categoryIssues = deptIssues.filter(i => i.category === category);
+        const negativeRatio = categoryIssues.length > 0
+                ? Math.round((categoryIssues.filter(i => i.sentiment === 'negative').length / categoryIssues.length) * 100)
+                : 0;
+        riskByCategory[category] = negativeRatio;
+      });
+
+      var riskOptions = {
+        series: [{
+          name: 'Risk Level',
+          data: Object.values(riskByCategory)
+        }],
+        chart: {
+          height: 300,
+          type: 'radar',
+          toolbar: { show: false }
+        },
+        xaxis: {
+          categories: Object.keys(riskByCategory)
+        },
+        yaxis: {
+          max: 100,
+          labels: {
+            formatter: function(val) {
+              return val + '%';
+            }
+          }
+        },
+        fill: {
+          opacity: 0.5,
+          colors: ['#FF4560']
+        }
+      };
+      new ApexCharts(document.querySelector("#burnout-level-chart"), riskOptions).render();
+    }
+
+
+// Initialize dashboard
+    document.addEventListener('DOMContentLoaded', () => {
+      updateDepartmentDashboard('IT');
+    });
+
+
+</script>
 </body>
-<!-- [Body] end -->
-
 </html>

@@ -286,7 +286,6 @@
     };
     new ApexCharts(document.querySelector("#burnout-level-chart"), burnoutOptions).render();
 
-    // Expanded WHO-based categories
     const initialCategories = {
         underused_skills: { name: "Under-use of Skills", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
         excessive_workload: { name: "Excessive Workload", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
@@ -316,6 +315,7 @@
         option.textContent = initialCategories[categoryKey].name;
         categorySelect.appendChild(option);
     });
+
   </script>
 </body>
 <!-- [Body] end -->

@@ -115,6 +115,16 @@
         }, 3000);
       });
     });
+
+    
+
+    // Function to Update Visibility Settings
+    function updateVisibility() {
+      const visibilityOption = document.getElementById("visibility-option").value;
+      localStorage.setItem("visibilitySettings", JSON.stringify({ visibilityOption }));
+      alert(`Visibility updated to ${visibilityOption}`);
+    }
+
   </script>
   
 </body>

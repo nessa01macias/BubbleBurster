@@ -791,7 +791,7 @@ section,
   background-color: var(--accent-color);
   color: var(--default-color);
   font-weight: 400;
-  font-size: 13px;
+  font-size: 32px;
   letter-spacing: 1px;
   text-transform: uppercase;
   display: inline-block;

@@ -1,158 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    @@include('../layouts/head-page-meta.html', {'title': 'Submit Feedback'}) @@include('../layouts/head-css.html')
+  </head>
 
-<head>
-    @@include('../layouts/head-page-meta.html', {'title': 'Submit Feedback'})
-    @@include('../layouts/head-css.html')
-</head>
-
-<body @@bodySetup>
+  <body @@bodySetup>
     @@include('../layouts/layout-vertical.html')
 
     <!-- [ Main Content ] start -->
     <div class="pc-container">
-        <div class="pc-content">
-            <div class="container my-5 w-50">
-                <h2 class="text-center">Submit Feedback</h2>
-                <form id="feedbackForm" onsubmit="event.preventDefault(); submitFeedback();">
-                    <!-- Department Input -->
-                    <div class="mb-3">
-                        <label for="feedback-department" class="form-label">Select Department:</label>
-                        <select id="feedback-department" class="form-select">
-                            <option value="IT">IT</option>
-                            <option value="HR">HR</option>
-                            <option value="Sales">Sales</option>
-                            <option value="Marketing">Marketing</option>
-                            <!-- Add more departments as needed -->
-                        </select>
-                    </div>
-
-                    <!-- Additional Details Input Box -->
-                    <div class="mb-3">
-                        <label for="detailsInput" class="form-label">Describe the Issue:</label>
-                        <textarea id="detailsInput" class="form-control" rows="4" placeholder="Describe the issue here..."></textarea>
-                    </div>
-
-                    <!-- Anonymity Toggle -->
-                    <div class="mb-3">
-                        <label class="form-label">Submit Anonymously:</label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="anonymity" id="anonymityYes" value="yes">
-                            <label class="form-check-label" for="anonymityYes">Yes</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="anonymity" id="anonymityNo" value="no" checked>
-                            <label class="form-check-label" for="anonymityNo">No</label>
-                        </div>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary">Submit Feedback</button>
-                </form>
-
-                <!-- Output for Debugging (Optional) -->
-                <div class="mt-4">
-                    <h4>Output:</h4>
-                    <pre id="output" class="border p-3 bg-light"></pre>
-                </div>
+      <div class="pc-content">
+        <div class="container my-5 w-50">
+          <h2 class="text-center">What is on your mind (work related)?</h2>
+          <form id="feedbackForm" onsubmit="event.preventDefault(); submitFeedback();">
+            <!-- Department Input -->
+            <div class="mb-3">
+              <label for="feedback-department" class="form-label">Select Department:</label>
+              <select id="feedback-department" class="form-select">
+                <option value="IT">IT</option>
+                <option value="HR">HR</option>
+                <option value="Sales">Sales</option>
+                <option value="Marketing">Marketing</option>
+                <!-- Add more departments as needed -->
+              </select>
             </div>
+
+            <!-- Additional Details Input Box -->
+            <div class="mb-3">
+              <label for="detailsInput" class="form-label">Describe your thoughts:</label>
+              <textarea id="detailsInput" class="form-control" rows="4" placeholder="Tell more about your thoughts here..."></textarea>
+            </div>
+
+            <!-- Anonymity Toggle -->
+            <div class="mb-3">
+              <label class="form-label">Submit Anonymously:</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="anonymity" id="anonymityYes" value="yes" />
+                <label class="form-check-label" for="anonymityYes">Yes</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="anonymity" id="anonymityNo" value="no" checked />
+                <label class="form-check-label" for="anonymityNo">No</label>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Save</button>
+          </form>
+
+          <!-- Output for Debugging (Optional) -->
+          <div class="mt-4">
+            <h4>Output:</h4>
+            <pre id="output" class="border p-3 bg-light"></pre>
+          </div>
         </div>
+      </div>
     </div>
     <!-- [ Main Content ] end -->
 
-    @@include('../layouts/footer-block.html')
-    @@include('../layouts/footer-js.html')
+    @@include('../layouts/footer-block.html') @@include('../layouts/footer-js.html')
 
     <!-- Script Section -->
     <script>
-        async function submitFeedback() {
-            const department = document.getElementById("feedback-department").value;
-            const details = document.getElementById("detailsInput").value;
-            const anonymity = document.querySelector('input[name="anonymity"]:checked').value;
-            const content = details; // Define content to be the details input for feedback
-    
-            try {
-                // Send the feedback content to Flask API for classification
-                const response = await fetch("http://127.0.0.1:5000/classify_feedback", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ content })
-                });
-    
-                // Parse the response from the server
-                const data = await response.json();
-    
-                // Log received data and check response structure
-                console.log("Received data:", data);
-                if (typeof data.category !== "string" || typeof data.sentiment !== "string" || typeof data.summary !== "string") {
-                    console.error("Invalid response structure from API:", data);
-                    return;
-                }
-    
-                const { category, sentiment, summary } = data;
-    
-                // Retrieve and update categories in localStorage
-                const categories = JSON.parse(localStorage.getItem("categories")) || {};
-                console.log("Categories object in localStorage:", categories);
-    
-                // Update category feedback counters
-                if (categories[category]) {
-                    if (sentiment === "positive") {
-                        categories[category].positiveFeedback += 1;
-                        categories[category].ranking -= 1;
-                    } else if (sentiment === "negative") {
-                        categories[category].negativeFeedback += 1;
-                        categories[category].ranking += 1;
-                    }
-                    console.log("Updated category in localStorage:", categories[category]);
-                } else {
-                    console.error("Category not found in localStorage:", category);
-                }
-    
-                // Save the updated categories back to localStorage
-                localStorage.setItem("categories", JSON.stringify(categories));
-    
-                // Update issues and progress tracker
-                const issues = JSON.parse(localStorage.getItem("issues")) || [];
-    
-                const newIssue = {
-                    id: issues.length + 1,
-                    summary,       // High-level summary from AI
-                    content,       // Detailed user input
-                    details,       // Issue description from user
-                    department,    // Department chosen by user
-                    category,      // AI-determined category
-                    anonymity      // User's anonymity choice
-                };
-                issues.push(newIssue);
-                localStorage.setItem("issues", JSON.stringify(issues));
-    
-                // Add entry to progress tracker if not already present
-                let progressTracker = JSON.parse(localStorage.getItem("progressTracker")) || [];
-                progressTracker.push({
-                    issueId: newIssue.id,       // Link to the issue ID for cross-reference
-                    department,
-                    category,
-                    summary,
-                    status: "To Do",            // Default status for new issues
-                    tags: [category],           // Tags to track issue nature
-                    actionsTaken: [],           // Array to store progress notes or actions
-                    anonymity                  // Include anonymity for reference
-                });
-                localStorage.setItem("progressTracker", JSON.stringify(progressTracker));
-    
-                // Clear the form after submission
-                document.getElementById("feedbackForm").reset();
-    
-                // Optionally display the result in the output area for debugging
-                document.getElementById("output").textContent = JSON.stringify(newIssue, null, 2);
-    
-            } catch (error) {
-                console.error("Error submitting feedback:", error);
+      async function submitFeedback() {
+        const department = document.getElementById('feedback-department').value;
+        const details = document.getElementById('detailsInput').value;
+        const anonymity = document.querySelector('input[name="anonymity"]:checked').value;
+        const content = details; // Define content to be the details input for feedback
+
+        try {
+          // Send the feedback content to Flask API for classification
+          const response = await fetch('http://127.0.0.1:5000/classify_feedback', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content })
+          });
+
+          // Parse the response from the server
+          const data = await response.json();
+
+          // Log received data and check response structure
+          console.log('Received data:', data);
+          if (typeof data.category !== 'string' || typeof data.sentiment !== 'string' || typeof data.summary !== 'string') {
+            console.error('Invalid response structure from API:', data);
+            return;
+          }
+
+          const { category, sentiment, summary } = data;
+
+          // Retrieve and update categories in localStorage
+          const categories = JSON.parse(localStorage.getItem('categories')) || {};
+          console.log('Categories object in localStorage:', categories);
+
+          // Update category feedback counters
+          if (categories[category]) {
+            if (sentiment === 'positive') {
+              categories[category].positiveFeedback += 1;
+              categories[category].ranking -= 1;
+            } else if (sentiment === 'negative') {
+              categories[category].negativeFeedback += 1;
+              categories[category].ranking += 1;
             }
+            console.log('Updated category in localStorage:', categories[category]);
+          } else {
+            console.error('Category not found in localStorage:', category);
+          }
+
+          // Save the updated categories back to localStorage
+          localStorage.setItem('categories', JSON.stringify(categories));
+
+          // Update issues and progress tracker
+          const issues = JSON.parse(localStorage.getItem('issues')) || [];
+
+          const newIssue = {
+            id: issues.length + 1,
+            summary, // High-level summary from AI
+            content, // Detailed user input
+            details, // Issue description from user
+            department, // Department chosen by user
+            category, // AI-determined category
+            anonymity // User's anonymity choice
+          };
+          issues.push(newIssue);
+          localStorage.setItem('issues', JSON.stringify(issues));
+
+          // Add entry to progress tracker if not already present
+          let progressTracker = JSON.parse(localStorage.getItem('progressTracker')) || [];
+          progressTracker.push({
+            issueId: newIssue.id, // Link to the issue ID for cross-reference
+            department,
+            category,
+            summary,
+            status: 'To Do', // Default status for new issues
+            tags: [category], // Tags to track issue nature
+            actionsTaken: [], // Array to store progress notes or actions
+            anonymity // Include anonymity for reference
+          });
+          localStorage.setItem('progressTracker', JSON.stringify(progressTracker));
+
+          // Clear the form after submission
+          document.getElementById('feedbackForm').reset();
+
+          // Optionally display the result in the output area for debugging
+          document.getElementById('output').textContent = JSON.stringify(newIssue, null, 2);
+        } catch (error) {
+          console.error('Error submitting feedback:', error);
         }
+      }
     </script>
-</body>
-</html>    
+  </body>
+</html>

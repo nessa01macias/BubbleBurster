@@ -40,10 +40,10 @@
   <div class="pc-container">
     <div class="pc-content">
       <!-- [ Main Content ] start -->
+
+      <!-- Row 1: Overall Mood, Overall Health, Feedback Response Rate -->
       <div class="row">
-        
-        <!-- Overall Mood Thermometer Graph -->
-        <div class="col-md-6 col-xl-7">
+        <div class="col-md-4">
           <div class="card">
             <div class="card-header">
               <h5>Overall Mood</h5>
@@ -53,30 +53,33 @@
             </div>
           </div>
         </div>
-        
-        <!-- Overall Health Gauge Chart -->
-        <div class="col-md-6 col-xl-5">
+
+        <div class="col-md-4">
           <div class="card">
-            <div class="card-header d-flex align-items-center justify-content-between py-3">
+            <div class="card-header">
               <h5>Overall Health</h5>
-              <div class="dropdown">
-                <a class="avtar avtar-xs btn-link-secondary dropdown-toggle arrow-none" href="#"
-                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
-                    class="material-icons-two-tone f-18">more_vert</i></a>
-                <div class="dropdown-menu dropdown-menu-end">
-                  <a class="dropdown-item" href="#">View</a>
-                  <a class="dropdown-item" href="#">Edit</a>
-                </div>
-              </div>
             </div>
             <div class="card-body">
-              <div id="health-gauge" style="height: 250px;"></div>
+              <div id="health-gauge" style="height: 200px;"></div>
             </div>
           </div>
         </div>
 
-        <!-- Employee Satisfaction Over Time -->
-        <div class="col-md-6 col-xl-6">
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header">
+              <h5>Feedback Response Rate</h5>
+            </div>
+            <div class="card-body">
+              <div id="feedback-rate-chart" style="height: 200px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Employee Satisfaction Over Time, Inter-Departmental Collaboration -->
+      <div class="row">
+        <div class="col-md-6">
           <div class="card">
             <div class="card-header">
               <h5>Employee Satisfaction Over Time</h5>
@@ -87,8 +90,7 @@
           </div>
         </div>
 
-        <!-- Inter-Departmental Collaboration -->
-        <div class="col-md-6 col-xl-6">
+        <div class="col-md-6">
           <div class="card">
             <div class="card-header">
               <h5>Inter-Departmental Collaboration</h5>
@@ -98,33 +100,39 @@
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Stress Levels by Department -->
-        <div class="col-md-6 col-xl-6">
+      <!-- Row 3: Burnout Levels by Department, Feedback Response Rate by Department -->
+      <div class="row">
+
+        <div class="col-md-6">
           <div class="card">
             <div class="card-header">
-              <h5>Stress Levels by Department</h5>
+              <h5>Feedback Response Rate by Department</h5>
             </div>
             <div class="card-body">
-              <div id="stress-chart" style="height: 250px;"></div>
+              <div id="feedback-response-chart" style="height: 250px;"></div>
             </div>
           </div>
         </div>
-
-        <!-- Feedback Response Rate -->
-        <div class="col-md-6 col-xl-6">
+      
+        <div class="col-md-6">
           <div class="card">
             <div class="card-header">
-              <h5>Feedback Response Rate</h5>
+              <h5>Burnout Levels by Department</h5>
             </div>
             <div class="card-body">
-              <div id="feedback-rate-chart" style="height: 250px;"></div>
+              <div id="burnout-level-chart" style="height: 250px;"></div>
             </div>
           </div>
         </div>
-        
-        <!-- Department Well-being Cards (moved to the bottom) -->
-        <div class="col-md-6 col-xl-3">
+      </div>
+
+
+
+      <!-- Row 4: Department Well-being Cards -->
+      <div class="row">
+        <div class="col-md-3">
           <div class="card bg-grd-primary order-card">
             <div class="card-body text-center">
               <h6 class="text-white">IT Well-being</h6>
@@ -138,7 +146,7 @@
           </div>
         </div>
 
-        <div class="col-md-6 col-xl-3">
+        <div class="col-md-3">
           <div class="card bg-grd-success order-card">
             <div class="card-body text-center">
               <h6 class="text-white">Marketing Well-being</h6>
@@ -152,7 +160,7 @@
           </div>
         </div>
 
-        <div class="col-md-6 col-xl-3">
+        <div class="col-md-3">
           <div class="card bg-grd-warning order-card">
             <div class="card-body text-center">
               <h6 class="text-white">HR Well-being</h6>
@@ -166,7 +174,7 @@
           </div>
         </div>
 
-        <div class="col-md-6 col-xl-3">
+        <div class="col-md-3">
           <div class="card bg-grd-danger order-card">
             <div class="card-body text-center">
               <h6 class="text-white">Sales Well-being</h6>
@@ -179,7 +187,6 @@
             </div>
           </div>
         </div>
-        
       </div>
       <!-- [ Main Content ] end -->
     </div>
@@ -193,7 +200,7 @@
     // Thermometer Graph for Overall Mood
     var moodOptions = {
       series: [75],
-      chart: { height: 250, type: 'radialBar' },
+      chart: { height: 200, type: 'radialBar' },
       plotOptions: { radialBar: { hollow: { size: '70%' } } },
       labels: ['Mood Level'],
       colors: ['#28a745']
@@ -203,11 +210,21 @@
     // Gauge Chart for Overall Health
     var healthOptions = {
       series: [58],
-      chart: { type: 'radialBar', height: 250 },
+      chart: { type: 'radialBar', height: 200 },
       plotOptions: { radialBar: { startAngle: -135, endAngle: 135, hollow: { size: '70%' } } },
       labels: ['Health Level']
     };
     new ApexCharts(document.querySelector("#health-gauge"), healthOptions).render();
+
+    // Feedback Response Rate
+    var feedbackOptions = {
+      series: [85],
+      chart: { type: 'radialBar', height: 200 },
+      plotOptions: { radialBar: { hollow: { size: '70%' } } },
+      labels: ['Response Rate'],
+      colors: ['#ffc107']
+    };
+    new ApexCharts(document.querySelector("#feedback-rate-chart"), feedbackOptions).render();
 
     // Employee Satisfaction Over Time
     var satisfactionOptions = {
@@ -227,23 +244,24 @@
     };
     new ApexCharts(document.querySelector("#collaboration-chart"), collaborationOptions).render();
 
-    // Stress Levels by Department
-    var stressOptions = {
-      series: [30, 20, 25, 15, 10],
-      chart: { type: 'pie', height: 250 },
-      labels: ['Marketing', 'HR', 'Sales', 'Operations', 'IT'],
-      colors: ['#dc3545', '#ffc107', '#007bff', '#28a745', '#17a2b8']
-    };
-    new ApexCharts(document.querySelector("#stress-chart"), stressOptions).render();
-
-    // Feedback Response Rate
-    var feedbackOptions = {
-      series: [85],
-      chart: { type: 'radialBar', height: 250 },
-      labels: ['Response Rate'],
+    // Feedback Response Rate by Department Chart
+    var feedbackDepartmentOptions = {
+      series: [{ name: 'Response Rate', data: [45, 38, 50, 65, 80] }],
+      chart: { type: 'bar', height: 250 },
+      xaxis: { categories: ['Marketing', 'HR', 'Sales', 'IT', 'Engineering'] },
       colors: ['#ffc107']
     };
-    new ApexCharts(document.querySelector("#feedback-rate-chart"), feedbackOptions).render();
+    new ApexCharts(document.querySelector("#feedback-response-chart"), feedbackDepartmentOptions).render();
+
+    // Burnout Levels by Department Chart
+    var burnoutOptions = {
+      series: [60, 70, 50, 40, 55],
+      chart: { type: 'radialBar', height: 250 },
+      labels: ['Engineering', 'Sales', 'Marketing', 'HR', 'IT'],
+      colors: ['#dc3545', '#ffc107', '#007bff', '#28a745', '#6c757d']
+    };
+    new ApexCharts(document.querySelector("#burnout-level-chart"), burnoutOptions).render();
+
   </script>
 </body>
 <!-- [Body] end -->

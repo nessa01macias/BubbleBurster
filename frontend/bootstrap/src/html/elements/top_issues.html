@@ -2,7 +2,7 @@
 <html lang="en">
 <!-- [Head] start -->
 <head>
-  @@include('../layouts/head-page-meta.html', {'title': 'Top Issues - Well-being Dashboard'})
+  @@include('../layouts/head-page-meta.html', {'title': 'Issues - Well-being Dashboard'})
   @@include('../layouts/head-css.html')
   <link rel="stylesheet" href="../assets/css/plugins/jsvectormap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.19.3/apexcharts.min.css">
@@ -40,44 +40,15 @@
       transform: translateY(-5px);
     }
     .issue-card h5 {
-      font-size: 1.5em;
-      font-weight: 700;
-      color: #dc3545;
+      font-size: 1.3em;
+      font-weight: 600;
+      color: #333;
       margin: 0;
     }
     .issue-card p {
       color: #6c757d;
       font-size: 1em;
       margin: 5px 0 0;
-    }
-    .chart-section {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-top: 20px;
-    }
-    .chart-card {
-      flex: 1;
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s;
-      min-width: 300px;
-    }
-    .chart-card:hover {
-      transform: translateY(-5px);
-    }
-    .chart-card h5 {
-      font-size: 1.2em;
-      color: #2b2b2b;
-      font-weight: 500;
-      margin-bottom: 15px;
-      text-align: center;
-    }
-    .icon {
-      font-size: 1.2em;
-      color: #ffc107;
     }
     .filter-section {
       display: flex;
@@ -129,7 +100,7 @@
         <!-- Header Section -->
         <div class="header-section">
           <h2>Top Issues in the Company</h2>
-          <p>An overview of the most critical issues affecting the company’s well-being and productivity.</p>
+          <p>An overview of the issues affecting the company’s well-being and productivity.</p>
         </div>
 
         <!-- Filter Section -->
@@ -168,13 +139,26 @@
 
         <!-- Paginated Issues List (Other Issues) -->
         <div id="issues-list">
-          <!-- Dynamically loaded list of other issues based on pagination and filters -->
-          <!-- Example Issue -->
           <div class="issue-card">
-            <h5><i class="icon">&#9888;</i> Low Team Collaboration in Marketing</h5>
+            <h5>Low Team Collaboration in Marketing</h5>
             <p>Interpersonal collaboration has been low, affecting project delivery timelines and quality.</p>
           </div>
-          <!-- Repeat for more issues -->
+          <div class="issue-card">
+            <h5>Employee Engagement Challenges in HR</h5>
+            <p>HR faces challenges in maintaining employee engagement levels across various teams.</p>
+          </div>
+          <div class="issue-card">
+            <h5>Delayed Project Deliveries in IT</h5>
+            <p>IT department has reported delays in project deliveries due to resource constraints.</p>
+          </div>
+          <div class="issue-card">
+            <h5>Increasing Workload in Engineering</h5>
+            <p>Engineering teams are handling an increasing workload, impacting their productivity and morale.</p>
+          </div>
+          <div class="issue-card">
+            <h5>Training Needs in Marketing</h5>
+            <p>Marketing department requires additional training on new digital tools to stay competitive.</p>
+          </div>
         </div>
 
         <!-- Pagination -->
@@ -182,27 +166,6 @@
           <a href="#" class="active">1</a>
           <a href="#">2</a>
           <a href="#">3</a>
-          <!-- Add more pages as needed -->
-        </div>
-
-        <!-- Chart Section -->
-        <div class="chart-section">
-          <div class="chart-card">
-            <h5>Burnout Levels by Department</h5>
-            <div id="burnout-level-chart" style="height: 250px;"></div>
-          </div>
-          <div class="chart-card">
-            <h5>Feedback Response Rate by Department</h5>
-            <div id="feedback-response-chart" style="height: 250px;"></div>
-          </div>
-          <div class="chart-card">
-            <h5>Stress Levels in Sales</h5>
-            <div id="stress-sales-chart" style="height: 250px;"></div>
-          </div>
-          <div class="chart-card">
-            <h5>Collaboration in Marketing</h5>
-            <div id="collaboration-marketing-chart" style="height: 250px;"></div>
-          </div>
         </div>
 
       </div>
@@ -210,46 +173,6 @@
   </div>
 
   @@include('../layouts/footer-block.html') <!-- Footer block -->
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.19.3/apexcharts.min.js"></script>
-  <script>
-    // Burnout Levels by Department
-    var burnoutOptions = {
-      series: [60, 70, 50, 40, 55],
-      chart: { type: 'radialBar', height: 250 },
-      labels: ['Engineering', 'Sales', 'Marketing', 'HR', 'IT'],
-      colors: ['#dc3545', '#ffc107', '#007bff', '#28a745', '#6c757d']
-    };
-    new ApexCharts(document.querySelector("#burnout-level-chart"), burnoutOptions).render();
-
-    // Feedback Response Rate by Department
-    var feedbackOptions = {
-      series: [{ name: 'Response Rate', data: [45, 38, 50, 65, 80] }],
-      chart: { type: 'bar', height: 250 },
-      xaxis: { categories: ['Marketing', 'HR', 'Sales', 'IT', 'Engineering'] },
-      colors: ['#ffc107']
-    };
-    new ApexCharts(document.querySelector("#feedback-response-chart"), feedbackOptions).render();
-
-    // Stress Levels in Sales
-    var stressSalesOptions = {
-      series: [{ name: 'Stress Level', data: [70, 75, 80, 65, 85] }],
-      chart: { type: 'line', height: 250 },
-      xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May'] },
-      colors: ['#dc3545'],
-      stroke: { width: 2, curve: 'smooth' },
-    };
-    new ApexCharts(document.querySelector("#stress-sales-chart"), stressSalesOptions).render();
-
-    // Collaboration in Marketing
-    var collaborationMarketingOptions = {
-      series: [{ name: 'Collaboration', data: [50, 60, 45, 55, 65] }],
-      chart: { type: 'bar', height: 250 },
-      xaxis: { categories: ['Project A', 'Project B', 'Campaign 1', 'Campaign 2', 'Ad Strategy'] },
-      colors: ['#28a745']
-    };
-    new ApexCharts(document.querySelector("#collaboration-marketing-chart"), collaborationMarketingOptions).render();
-  </script>
 
   <script>
     // Filter functionality and pagination handling (to be implemented)

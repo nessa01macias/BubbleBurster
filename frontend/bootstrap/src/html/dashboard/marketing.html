@@ -2,11 +2,12 @@
 <html lang="en">
 <!-- [Head] start -->
 <head>
-  @@include('../layouts/head-page-meta.html', {'title': 'Engineering Department - Well-being Dashboard'})
+  @@include('../layouts/head-page-meta.html', {'title': 'Marketing Department - Well-being Dashboard'})
   <link rel="stylesheet" href="../assets/css/plugins/jsvectormap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.19.3/apexcharts.min.css">
   @@include('../layouts/head-css.html')
   <style>
+
     .container {
       max-width: 1200px;
       margin: auto;
@@ -107,14 +108,12 @@
   </style>
 </head>
 <!-- [Head] end -->
-
 <!-- [Body] Start -->
 <body @@bodySetup>
-  @@include('../layouts/layout-vertical.html')
+  @@include('../layouts/layout-vertical.html') <!-- Adds the menu bar -->
 
   <div class="pc-container">
     <div class="pc-content">
-      
       <div class="container">
         
         <!-- Header Section with Back Button -->
@@ -122,82 +121,72 @@
           <a href="index.html" class="back-button">
             &#8592; Back
           </a>
-          <h2>Engineering Department</h2>
-          <p>Detailed insights into the well-being, performance, and collaboration of the Engineering team.</p>
+          <h2>Marketing Department</h2>
+          <p>Detailed insights into the well-being, performance, and collaboration of the Marketing team.</p>
         </div>
         
         <!-- Metric Cards Section -->
         <div class="metric-cards">
           <div class="card">
             <h6><i class="icon">&#128522;</i> Satisfaction Rate</h6>
-            <h2>85%</h2>
+            <h2>88%</h2>
           </div>
           <div class="card">
             <h6><i class="icon">&#128101;</i> Team Collaboration</h6>
-            <h2>78%</h2>
+            <h2>82%</h2>
           </div>
           <div class="card">
             <h6><i class="icon">&#128172;</i> Feedback Response</h6>
-            <h2>92%</h2>
+            <h2>91%</h2>
           </div>
           <div class="card">
             <h6><i class="icon">&#128679;</i> Stress Level</h6>
-            <h2>25%</h2>
+            <h2>22%</h2>
           </div>
         </div>
         
         <!-- Chart Section -->
         <div class="chart-section">
-          
-          <!-- Performance Trends Chart -->
           <div class="chart-card">
-            <h5>Performance Trends</h5>
-            <div id="performance-trends-chart" style="height: 250px;"></div>
+            <h5>Marketing Performance Trends</h5>
+            <div id="marketing-performance-trends-chart" style="height: 250px;"></div>
           </div>
-          
-          <!-- Stress Levels Chart (Increased Size) -->
           <div class="chart-card">
             <h5>Stress Levels</h5>
-            <div id="stress-levels-chart" style="height: 300px;"></div>
+            <div id="marketing-stress-levels-chart" style="height: 300px;"></div>
           </div>
-          
-          <!-- Collaboration Breakdown Chart -->
           <div class="chart-card">
             <h5>Collaboration Breakdown</h5>
-            <div id="collaboration-breakdown-chart" style="height: 250px;"></div>
+            <div id="marketing-collaboration-breakdown-chart" style="height: 250px;"></div>
           </div>
-          
-          <!-- Feedback Response Rate (Adjusted Text Position) -->
           <div class="chart-card">
             <h5>Feedback Response Rate</h5>
-            <div id="feedback-response-chart" style="height: 300px;"></div>
+            <div id="marketing-feedback-response-chart" style="height: 300px;"></div>
           </div>
-          
         </div>
 
       </div>
-
     </div>
   </div>
-  
-  @@include('../layouts/footer-block.html') 
-  
+
+  @@include('../layouts/footer-block.html') <!-- Footer block -->
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.19.3/apexcharts.min.js"></script>
   <script>
-    // Performance Trends Line Chart
-    var performanceTrendsOptions = {
-      series: [{ name: 'Performance', data: [70, 75, 80, 85, 88, 92, 95] }],
+    // Marketing Performance Trends Line Chart
+    var marketingPerformanceTrendsOptions = {
+      series: [{ name: 'Performance', data: [72, 78, 82, 85, 88, 90, 93] }],
       chart: { type: 'line', height: 250 },
       xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'] },
       colors: ['#007bff'],
       stroke: { width: 2, curve: 'smooth' },
       tooltip: { theme: 'light' }
     };
-    new ApexCharts(document.querySelector("#performance-trends-chart"), performanceTrendsOptions).render();
+    new ApexCharts(document.querySelector("#marketing-performance-trends-chart"), marketingPerformanceTrendsOptions).render();
 
-    // Stress Levels Pie Chart (Increased Size)
-    var stressLevelsOptions = {
-      series: [25, 30, 20, 15, 10],
+    // Marketing Stress Levels Pie Chart
+    var marketingStressLevelsOptions = {
+      series: [22, 25, 28, 15, 10],
       chart: { type: 'pie', height: 300 },
       labels: ['High', 'Moderate', 'Low', 'Very Low', 'Minimal'],
       colors: ['#dc3545', '#ffc107', '#28a745', '#007bff', '#6c757d'],
@@ -206,13 +195,13 @@
         fontSize: '14px'
       }
     };
-    new ApexCharts(document.querySelector("#stress-levels-chart"), stressLevelsOptions).render();
+    new ApexCharts(document.querySelector("#marketing-stress-levels-chart"), marketingStressLevelsOptions).render();
 
-    // Collaboration Breakdown Bar Chart
-    var collaborationBreakdownOptions = {
-      series: [{ name: 'Collaboration', data: [50, 60, 70, 40, 80] }],
+    // Marketing Collaboration Breakdown Bar Chart
+    var marketingCollaborationBreakdownOptions = {
+      series: [{ name: 'Collaboration', data: [70, 75, 78, 65, 80] }],
       chart: { type: 'bar', height: 250 },
-      xaxis: { categories: ['Project A', 'Project B', 'Project C', 'Project D', 'Project E'] },
+      xaxis: { categories: ['Campaign A', 'Campaign B', 'Social Media', 'SEO', 'Content'] },
       colors: ['#28a745'],
       plotOptions: {
         bar: {
@@ -223,11 +212,11 @@
       },
       dataLabels: { enabled: false }
     };
-    new ApexCharts(document.querySelector("#collaboration-breakdown-chart"), collaborationBreakdownOptions).render();
+    new ApexCharts(document.querySelector("#marketing-collaboration-breakdown-chart"), marketingCollaborationBreakdownOptions).render();
 
-    // Feedback Response Rate Gauge Chart (Adjusted Text Position)
-    var feedbackResponseOptions = {
-      series: [92],
+    // Marketing Feedback Response Rate Gauge Chart
+    var marketingFeedbackResponseOptions = {
+      series: [91],
       chart: { type: 'radialBar', height: 300 },
       plotOptions: {
         radialBar: {
@@ -241,10 +230,9 @@
       labels: ['Response Rate'],
       colors: ['#ffc107']
     };
-    new ApexCharts(document.querySelector("#feedback-response-chart"), feedbackResponseOptions).render();
+    new ApexCharts(document.querySelector("#marketing-feedback-response-chart"), marketingFeedbackResponseOptions).render();
   </script>
 
 </body>
 <!-- [Body] end -->
-
 </html>

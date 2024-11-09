@@ -146,6 +146,12 @@
     <!-- Footer block -->
 
     <script>
+      // Function to save selected issue ID and navigate to tracking.html
+      function viewIssueInProgress(issueId) {
+        localStorage.setItem('selectedIssueId', issueId); // Store the selected issue ID
+        window.location.href = 'tracking.html'; // Navigate to the tracking page
+      }
+
       document.addEventListener('DOMContentLoaded', () => {
         populateFilters();
         displayTopIssues();
@@ -249,10 +255,10 @@
       // Call displayTopIssues to render the updated list
       displayTopIssues();
 
-      // Function to Display Paginated Issues List
+      // Updated displayPaginatedIssues to include clickable cards
       function displayPaginatedIssues(page = 1) {
         const issues = JSON.parse(localStorage.getItem('issues'));
-        const issuesPerPage = 5; // Customize how many issues to show per page
+        const issuesPerPage = 5;
         const startIndex = (page - 1) * issuesPerPage;
         const endIndex = startIndex + issuesPerPage;
 
@@ -261,13 +267,12 @@
         issuesList.innerHTML = paginatedIssues
           .map(
             (issue) => `
-        <div class="issue-card">
+        <div class="issue-card" onclick="viewIssueInProgress(${issue.id})">
           <h5>${issue.summary}</h5>
           <p>${issue.content}</p>
           <p><strong>Department:</strong> ${issue.department}</p>
           <p><strong>Category:</strong> ${issue.category}</p>
-        </div>
-      `
+        </div>`
           )
           .join('');
 
@@ -312,13 +317,12 @@
         issuesList.innerHTML = filteredIssues
           .map(
             (issue) => `
-                <div class="issue-card">
-                    <h5>${issue.summary}</h5>
-                    <p>${issue.content}</p>
-                    <p><strong>Department:</strong> ${issue.department}</p>
-                    <p><strong>Category:</strong> ${issue.category}</p>
-                </div>
-                `
+              <div class="issue-card" onclick="viewIssueInProgress(${issue.id})">
+                <h5>${issue.summary}</h5>
+                <p>${issue.content}</p>
+                <p><strong>Department:</strong> ${issue.department}</p>
+                <p><strong>Category:</strong> ${issue.category}</p>
+              </div>`
           )
           .join('');
       }

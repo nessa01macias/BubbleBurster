@@ -1,0 +1,17 @@
+Person 1 - Project Manager, Marketing Department
+"Hey team, we really need to wrap up the new campaign by Friday. The client is getting impatient, and we can’t afford any delays."
+
+Person 2 - Content Strategist, Marketing Department
+"Got it. I’m working on the copy, but I have a few other projects in the pipeline. Are there specific parts you want prioritized for Friday?"
+
+Person 1 - Project Manager, Marketing Department
+"Just focus on the main deliverables. We don’t have time to get into the details right now."
+
+Person 3 - Graphic Designer, Marketing Department
+"Wait, what exactly are the main deliverables? Are we talking visuals or messaging? I thought the visuals were still under review."
+
+Person 1 - Project Manager, Marketing Department
+"Honestly, I just need everything to look client-ready. We’ll worry about the final touches later."
+
+Person 2 - Content Strategist, Marketing Department
+"That’s a bit vague. Should I prioritize the copy or the overall campaign strategy for now?"

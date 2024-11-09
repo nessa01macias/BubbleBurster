@@ -1,0 +1,20 @@
+Head of IT
+"We need to work more closely with the development team to improve overall productivity."
+
+IT Support Specialist
+"Are you referring to aligning our ticketing process with their development sprints?"
+
+Head of IT
+"Yes, but also just general collaboration. We should be supporting each other."
+
+Software Engineer, Development Department
+"Are we looking at regular meetings, or more of an on-demand support model?"
+
+Head of IT
+"A bit of both. Just make sure we’re not creating bottlenecks for each other."
+
+IT Support Specialist
+"Specific goals or timelines would help. Should we start with a particular project or issue?"
+
+Head of IT
+"I’ll leave it to you to figure out what makes sense for both teams."

@@ -1,0 +1,17 @@
+Person 1 - Sales Director
+"We need the sales pitch deck updated ASAP. The client expects something modern and dynamic."
+
+Person 2 - Sales Rep
+"I’m on it, but could you specify what they’re looking for? Are there specific elements they want changed?"
+
+Person 1 - Sales Director
+"They just want it to feel fresh. Can you work your magic?"
+
+Person 3 - Marketing Coordinator
+"Should we be updating the messaging too, or just the visuals? I thought they liked the current pitch."
+
+Person 1 - Sales Director
+"Just tweak it. It doesn’t have to be a full redesign, but make it more engaging."
+
+Person 2 - Sales Rep
+"‘Fresh’ and ‘engaging’ are a bit vague. Should I make it more visual, add more data, or focus on storytelling?"

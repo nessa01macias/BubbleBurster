@@ -1,0 +1,17 @@
+Person 1 - Head of IT
+"We need to improve synergy across the IT and development teams. Better collaboration is essential."
+
+Person 2 - IT Support Specialist
+"Understood. Are we supposed to align on troubleshooting processes, or is this more about development cycles?"
+
+Person 1 - Head of IT
+"Well, just more teamwork in general. Maybe more regular syncs or collaborative projects."
+
+Person 3 - Software Engineer, Development Department
+"Syncs are fine, but who’s responsible for leading these? And what’s the primary goal here?"
+
+Person 1 - Head of IT
+"It’s about everyone being on the same page. If we’re aligned, productivity will improve."
+
+Person 2 - IT Support Specialist
+"Without specific action points, it’s hard to know where to focus. Can we pick one or two areas to collaborate on first?"

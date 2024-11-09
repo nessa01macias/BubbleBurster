@@ -1,0 +1,1 @@
+issues = [{"id":1,"summary":"Workplace Harassment Report","content":"yesterday someone harrassed me in the bathroom when i was on second floor. i am too ashamed to say to say anything to my manager so i just put it here instead...\n","department":"IT","category":"violence_harassment","anonymity":"no"}]

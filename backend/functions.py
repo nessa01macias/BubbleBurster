@@ -72,7 +72,7 @@ def classify_input(content: str, categories: dict) -> dict:
 
     Instructions:
     1. Carefully read the provided text.
-    2. From the following categories, select one or several that the content belongs to:
+    2. From the following categories, select one and only one that the content belongs to:
     Categories: 
     {categories}
     3. Select a sentiment, either positive or negative, based on the overall tone of the content.

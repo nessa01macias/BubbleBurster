@@ -31,7 +31,6 @@ Object.keys(initialCategories).forEach(categoryKey => {
 
 
 
-// Function to Submit Feedback with API call
 async function submitFeedback() {
     const department = document.getElementById("feedback-department").value;
     const content = document.getElementById("feedback-content").value;
@@ -49,33 +48,27 @@ async function submitFeedback() {
         // Parse the response from the server
         const data = await response.json();
 
-        // Check for valid category and sentiment by verifying their type explicitly
-        console.log("Received data:", data); // Log the entire response
-        console.log("Type of data.category:", typeof data.category); // Check type of category
-        console.log("Type of data.sentiment:", typeof data.sentiment); // Check type of sentiment
-
-        if (typeof data.category !== "string" || typeof data.sentiment !== "string") {
+        // Log received data and check response structure
+        console.log("Received data:", data);
+        if (typeof data.category !== "string" || typeof data.sentiment !== "string" || typeof data.summary !== "string") {
             console.error("Invalid response structure from API:", data);
             return;
         }
 
-        const category = data.category;
-        const sentiment = data.sentiment;
-
-        console.log("Received from backend:", data); // Log the backend response
+        const { category, sentiment, summary } = data;
 
         // Retrieve and update categories in localStorage
         const categories = JSON.parse(localStorage.getItem("categories"));
-        console.log("Categories object in localStorage:", categories);  // Log all categories
+        console.log("Categories object in localStorage:", categories);
 
-        // Check if category exists in localStorage and update it
+        // Update category feedback counters
         if (categories[category]) {
             if (sentiment === "positive") {
                 categories[category].positiveFeedback += 1;
-                categories[category].ranking -= 1; // Positive feedback decreases ranking
+                categories[category].ranking -= 1;
             } else if (sentiment === "negative") {
                 categories[category].negativeFeedback += 1;
-                categories[category].ranking += 1; // Negative feedback increases ranking
+                categories[category].ranking += 1;
             }
             console.log("Updated category in localStorage:", categories[category]);
         } else {
@@ -85,24 +78,30 @@ async function submitFeedback() {
         // Save the updated categories back to localStorage
         localStorage.setItem("categories", JSON.stringify(categories));
 
-        // Update other localStorage items if necessary
+        // Update issues and progress tracker
         const issues = JSON.parse(localStorage.getItem("issues"));
-        let progressTracker = JSON.parse(localStorage.getItem("progressTracker"));
 
-        // Add the new issue to issues array
-        const newIssue = { id: issues.length + 1, content, category, department };
+        const newIssue = {
+            id: issues.length + 1,
+            summary,       // High-level summary from AI
+            content,       // Detailed user input
+            department,    // Department chosen by user
+            category       // AI-determined category
+        };
         issues.push(newIssue);
         localStorage.setItem("issues", JSON.stringify(issues));
 
         // Add entry to progress tracker if not already present
-        if (!progressTracker.find(entry => entry.category === category && entry.department === department)) {
-            progressTracker.push({
-                department,
-                category,
-                status: "To Do",
-                actionsTaken: []
-            });
-        }
+        let progressTracker = JSON.parse(localStorage.getItem("progressTracker"));
+        progressTracker.push({
+            issueId: newIssue.id,       // Link to the issue ID for cross-reference
+            department,
+            category,
+            summary,
+            status: "To Do",            // Default status for new issues
+            tags: [category],           // Tags to track issue nature
+            actionsTaken: []            // Array to store progress notes or actions
+        });
         localStorage.setItem("progressTracker", JSON.stringify(progressTracker));
 
         // Update the UI
@@ -118,9 +117,10 @@ async function submitFeedback() {
 
 
 
-// Updated Function to Display Top Issues (based on positive/negative feedback difference)
+// Updated Function to Display Top Issues with Sorting and Clickable Links
 function displayTopIssues() {
     const categories = JSON.parse(localStorage.getItem("categories"));
+    const issues = JSON.parse(localStorage.getItem("issues"));
 
     // Sort categories by the difference between negative and positive feedback
     const sortedCategories = Object.values(categories).sort((a, b) => {
@@ -129,12 +129,24 @@ function displayTopIssues() {
         return diffB - diffA; // Sort by largest negative difference
     });
 
-    // Display the top 3 issues based on the largest negative difference
     const topIssuesList = document.getElementById("top-issues-list");
+
+    // Display the top issues based on sorted categories
     topIssuesList.innerHTML = sortedCategories.slice(0, 3).map(cat => {
+        // Find the first issue related to this category (if available)
+        const relatedIssue = issues.find(issue => issue.category === cat.name);
         const difference = cat.negativeFeedback - cat.positiveFeedback;
-        return `<li>${cat.name}: Negative Difference = ${difference}</li>`;
+
+        return relatedIssue
+            ? `<li onclick="viewIssueInProgress(${relatedIssue.id})">${relatedIssue.summary}: Negative Difference = ${difference}</li>`
+            : `<li>${cat.name}: No issues found in this category</li>`;
     }).join("");
+}
+
+// Function to set the selected issue in Progress Tracker
+function viewIssueInProgress(issueId) {
+    localStorage.setItem("selectedIssueId", issueId); // Store selected issue ID for Progress Tracker
+    displayProgress(); // Refresh Progress Tracker to show the selected issue
 }
 
 
@@ -187,14 +199,27 @@ function displayStatistics() {
 
 // Updated Function to Track Progress
 function displayProgress() {
-    const departmentFilter = document.getElementById("progress-department-filter").value;
+    const selectedIssueId = localStorage.getItem("selectedIssueId");
     const progressTracker = JSON.parse(localStorage.getItem("progressTracker"));
-    const filteredProgress = departmentFilter === "all" ? progressTracker : progressTracker.filter(prog => prog.department === departmentFilter);
+    const selectedIssue = progressTracker.find(entry => entry.issueId == selectedIssueId);
 
     const progressList = document.getElementById("progress-list");
-    progressList.innerHTML = filteredProgress.map(prog => {
-        return `<li>Department: ${prog.department} | Category: ${prog.category} | Status: ${prog.status} | Actions Taken: ${prog.actionsTaken.join(", ")}</li>`;
-    }).join("");
+    if (selectedIssue) {
+        progressList.innerHTML = `
+            <h3>${selectedIssue.summary}</h3>
+            <p><strong>Department:</strong> ${selectedIssue.department}</p>
+            <p><strong>Status:</strong> ${selectedIssue.status}</p>
+            <p><strong>Tags:</strong> ${selectedIssue.tags.join(", ")}</p>
+            <p><strong>Details:</strong> ${selectedIssue.content}</p>
+            <p><strong>AI Advice:</strong> Add advice or insights here</p>
+            <p><strong>Company Notes:</strong> ${selectedIssue.actionsTaken.join("<br>")}</p>
+            <div><strong>Progress:</strong>
+                <progress value="${getProgressValue(selectedIssue.status)}" max="100"></progress>
+            </div>
+        `;
+    } else {
+        progressList.innerHTML = "<p>Select an issue from Top Issues to view its progress.</p>";
+    }
 }
 
 

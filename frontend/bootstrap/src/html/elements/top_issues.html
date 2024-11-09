@@ -84,6 +84,19 @@
         background-color: #0056b3;
         color: #fff;
       }
+
+      /* New CSS for highlighted urgent section */
+      .urgent-section {
+        background: #ffefef; /* light red background */
+        border: 2px solid #ff6b6b; /* red border */
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+      .urgent-section h3 {
+        font-size: 1.6em;
+        color: #d9534f; /* red text color */
+      }
     </style>
   </head>
   <!-- [Head] end -->
@@ -99,7 +112,7 @@
           <!-- Header Section -->
           <div class="header-section">
             <h2>Top Issues in the Company</h2>
-            <p>An overview of the issues affecting the company’s well-being and productivity.</p>
+            <p>An overview of the issues affecting the company’s well-being.</p>
           </div>
 
           <!-- Filter Section -->
@@ -146,36 +159,78 @@
         displayPaginatedIssues();
       });
 
-      // Function to Display Top Issues with Sorting and CSS Mapping
+      // Function to Display Top Issues with Most Urgent Categories at the Top
       function displayTopIssues() {
         const categories = JSON.parse(localStorage.getItem('categories'));
         const issues = JSON.parse(localStorage.getItem('issues'));
 
-        const sortedCategories = Object.values(categories).sort((a, b) => {
-          const diffA = a.negativeFeedback - a.positiveFeedback;
-          const diffB = b.negativeFeedback - b.positiveFeedback;
-          return diffB - diffA;
-        });
+        // Calculate frequency of issues per category
+        const categoryFrequency = issues.reduce((freq, issue) => {
+          freq[issue.category] = (freq[issue.category] || 0) + 1;
+          return freq;
+        }, {});
+
+        // Sort categories by frequency, descending
+        const sortedCategories = Object.keys(categoryFrequency)
+          .filter((category) => categoryFrequency[category] > 1) // Updated to > 1
+          .sort((a, b) => categoryFrequency[b] - categoryFrequency[a])
+          .slice(0, 3); // Get the top 3 categories with the most issues
 
         const topIssuesList = document.getElementById('top-issues-list');
-        topIssuesList.innerHTML = sortedCategories
-          .slice(0, 3)
+
+        // Display top urgent categories with fire emojis
+        const urgentCategoriesHTML = sortedCategories
+          .map((category) => {
+            const issueCount = categoryFrequency[category];
+            const fireEmojis = '🔥'.repeat(issueCount);
+            const categoryName = categories[category]?.name || category;
+
+            return `<div class="issue-card">
+                  <h5>${categoryName} ${fireEmojis}</h5>
+                  <p><strong>Number of Issues:</strong> ${issueCount}</p>
+              </div>`;
+          })
+          .join('');
+
+        // Display the top 3 most frequent categories with fire emojis at the top
+        topIssuesList.innerHTML = `<div class="urgent-section">
+      <h3>Most Urgent Issues</h3>
+      ${urgentCategoriesHTML}
+  </div>`;
+
+        // Display all issues sorted by largest negative feedback difference in other categories
+        const sortedCategoriesByFeedback = Object.values(categories)
+          .filter((cat) => issues.some((issue) => issue.category === cat.name))
+          .sort((a, b) => {
+            const diffA = a.negativeFeedback - a.positiveFeedback;
+            const diffB = b.negativeFeedback - b.positiveFeedback;
+            return diffB - diffA;
+          });
+
+        // Append remaining issues to the list
+        const otherIssuesHTML = sortedCategoriesByFeedback
           .map((cat) => {
             const relatedIssue = issues.find((issue) => issue.category === cat.name);
             const difference = cat.negativeFeedback - cat.positiveFeedback;
 
             return relatedIssue
               ? `<div class="issue-card">
-              <h5><i class="icon">&#9888;</i> ${relatedIssue.summary}</h5>
-              <p>${relatedIssue.content}</p>
-              <p><strong>Category:</strong> ${relatedIssue.category}</p>
-              <p><strong>Department:</strong> ${relatedIssue.department}</p>
-              <p><strong>Negative Difference:</strong> ${difference}</p>
+                <h5>${relatedIssue.summary}</h5>
+                <p>${relatedIssue.content}</p>
+                <p><strong>Department:</strong> ${relatedIssue.department}</p>
+                <p><strong>Category:</strong> ${relatedIssue.category}</p>
+                <p><strong>Negative Difference:</strong> ${difference}</p>
             </div>`
-              : `<div class="issue-card"><h5>${cat.name}: No issues found in this category</h5></div>`;
+              : '';
           })
           .join('');
+
+        // Append the urgent issues and other issues to topIssuesList
+        topIssuesList.innerHTML += otherIssuesHTML;
       }
+
+      // Call displayTopIssues to render the updated list
+      displayTopIssues();
 
       // Function to Display Paginated Issues List
       function displayPaginatedIssues(page = 1) {

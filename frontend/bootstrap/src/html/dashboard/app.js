@@ -32,39 +32,6 @@ function viewIssueInProgress(issueId) {
 
 
 
-// Function to Send User Input to Backend Chatbot
-async function sendToChatbot() {
-    const input = document.getElementById("chat-input").value;
-    const chatbox = document.getElementById("chatbox");
-
-    // Display user input in the chatbox
-    chatbox.innerHTML += `<p>You: ${input}</p>`;
-    document.getElementById("chat-input").value = ""; // Clear input field
-
-    try {
-        // Send user input to the Flask backend
-        const response = await fetch("http://127.0.0.1:5000/get_chat_response", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ message: input })
-        });
-
-        // Parse the response from the backend
-        const data = await response.json();
-        const botResponse = data.response || "Sorry, I couldn't understand that."; // Default response if none provided
-
-        // Display the bot's response in the chatbox
-        chatbox.innerHTML += `<p>Bot: ${botResponse}</p>`;
-    } catch (error) {
-        console.error("Error communicating with chatbot:", error);
-        chatbox.innerHTML += `<p>Bot: Sorry, there was an error processing your request.</p>`;
-    }
-}
-
-
-
 
 
 // Function to Display Homepage Statistics
@@ -103,16 +70,6 @@ function displayProgress() {
     }
 }
 
-
-
-
-
-// Function to Update Visibility Settings
-function updateVisibility() {
-    const visibilityOption = document.getElementById("visibility-option").value;
-    localStorage.setItem("visibilitySettings", JSON.stringify({ visibilityOption }));
-    alert(`Visibility updated to ${visibilityOption}`);
-}
 
 
 

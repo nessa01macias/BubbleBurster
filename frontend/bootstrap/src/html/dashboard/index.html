@@ -263,6 +263,37 @@
       colors: ['#dc3545', '#ffc107', '#007bff', '#28a745', '#6c757d']
     };
     new ApexCharts(document.querySelector("#burnout-level-chart"), burnoutOptions).render();
+
+    // Expanded WHO-based categories
+    const initialCategories = {
+        underused_skills: { name: "Under-use of Skills", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
+        excessive_workload: { name: "Excessive Workload", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
+        long_hours: { name: "Long, Unsocial or Inflexible Hours", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
+        lack_of_control: { name: "Lack of Control Over Job Design", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
+        unsafe_conditions: { name: "Unsafe or Poor Physical Conditions", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
+        negative_culture: { name: "Negative Organizational Culture", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
+        limited_support: { name: "Limited Support from Colleagues", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
+        violence_harassment: { name: "Violence, Harassment, or Bullying", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
+        discrimination: { name: "Discrimination and Exclusion", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
+        unclear_role: { name: "Unclear Job Role", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
+        under_promotion: { name: "Under- or Over-promotion", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
+        job_insecurity: { name: "Job Insecurity or Inadequate Pay", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
+        work_home_conflict: { name: "Conflicting Home/Work Demands", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 }
+    };
+
+    if (!localStorage.getItem("categories")) localStorage.setItem("categories", JSON.stringify(initialCategories));
+    if (!localStorage.getItem("issues")) localStorage.setItem("issues", JSON.stringify([]));
+    if (!localStorage.getItem("progressTracker")) localStorage.setItem("progressTracker", JSON.stringify([]));
+    if (!localStorage.getItem("visibilitySettings")) localStorage.setItem("visibilitySettings", JSON.stringify({ visibilityOption: "company-wide" }));
+
+    // Populate categories in the feedback form
+    const categorySelect = document.getElementById("feedback-category");
+    Object.keys(initialCategories).forEach(categoryKey => {
+        const option = document.createElement("option");
+        option.value = categoryKey;
+        option.textContent = initialCategories[categoryKey].name;
+        categorySelect.appendChild(option);
+    });
   </script>
 </body>
 <!-- [Body] end -->

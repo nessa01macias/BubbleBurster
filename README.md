@@ -1,6 +1,8 @@
 # 🎉 Bubble Burster: Your AI Sidekick for Breaking Communication Barriers! 🎉
 Ever feel like you’re talking, but no one’s really getting it? Enter Bubble Burster – an AI-powered teammate that jumps into your meetings (Teams, Zoom, Slack, you name it!) to help bridge those pesky communication gaps and keep everyone on the same page.
 
+[**Pitch video**](https://www.youtube.com/watch?v=7Z2e3dyo3G8)
+
 ## 🚀 What’s Bubble Burster All About?
 Bubble Burster is like having a super-savvy friend who “gets” everyone and makes sure everyone else does too. It works two-fold:
 

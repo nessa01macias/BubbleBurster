@@ -1,8 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    @@include('../layouts/head-page-meta.html', {'title': 'Your Diary'}) @@include('../layouts/head-css.html')
-  </head>
+<head>
+  @@include('../layouts/head-page-meta.html', {'title': 'Submit Feedback'})
+  @@include('../layouts/head-css.html')
+  <style>
+    .btn-disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .submission-result {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 4px;
+    }
+    .sentiment-negative {
+      background-color: #ffebee;
+      border: 1px solid #ffcdd2;
+    }
+    .sentiment-positive {
+      background-color: #e8f5e9;
+      border: 1px solid #c8e6c9;
+    }
+  </style>
+</head>
 
 <body @@bodySetup>
 @@include('../layouts/layout-vertical.html')
@@ -123,13 +145,13 @@
       localStorage.setItem('categories', JSON.stringify(categories));
 
       // Update issues with date
+
       const issues = JSON.parse(localStorage.getItem('issues')) || [];
-      let issueCounter = parseInt(localStorage.getItem('issueCounter') || '0');
-      issueCounter++;
-      localStorage.setItem('issueCounter', issueCounter.toString());
+      const newIssueId = issues.length + 1;
+
 
       const newIssue = {
-        id: issueCounter,
+        id: newIssueId,
         summary,
         content,
         department,
@@ -148,6 +170,7 @@
         department,
         category,
         summary,
+        sentiment,
         status: 'To Do',
         tags: [category],
         actionsTaken: [],
@@ -158,6 +181,7 @@
       progressTracker.push(newEntry);
       localStorage.setItem('progressTracker', JSON.stringify(progressTracker));
 
+      checkNewIssues();
       // Update submission result box style based on sentiment
       submissionResult.className = 'submission-result';
       submissionResult.classList.add(sentiment === 'positive' ? 'sentiment-positive' : 'sentiment-negative');
@@ -176,9 +200,6 @@
       detailsInput.value = '';
       document.getElementById('output').textContent = JSON.stringify(newIssue, null, 2);
 
-      // Update notifications
-      updateDashboardNotifications();
-
       // Re-enable button after 2 seconds
       setTimeout(() => {
         submitButton.classList.remove('btn-disabled');
@@ -193,16 +214,46 @@
   }
 
 
+  // Function to count unseen issues
+  function getUnseenIssuesAnalysis() {
+    const progressTracker = JSON.parse(localStorage.getItem('progressTracker')) || [];
+    const unseenIssues = progressTracker.filter(issue => !issue.seen);
+
+    const analysis = unseenIssues.reduce((acc, issue) => {
+      console.log(issue)
+      console.log(issue.sentiment)
+      issue.sentiment === 'positive' ? acc.positive++ : acc.negative++;
+      return acc;
+    }, { positive: 0, negative: 0, total: 0 });
+
+    analysis.total = unseenIssues.length;
+    return analysis;
+  }
+
   // Your alert script
   function checkNewIssues() {
-    const issueCounter = parseInt(localStorage.getItem('issueCounter') || '0');
-    if (issueCounter > 0) {
+    const analysis = getUnseenIssuesAnalysis();
+    console.log("Checking unseen issues:", analysis);
+
+    if (analysis.total > 0) {
       const issuesAlert = document.getElementById('issues-alert');
       if (issuesAlert) {
-        issuesAlert.textContent = '!';
+        issuesAlert.textContent = `Company Health (${analysis.total})`;
+
+        // Set color based on sentiment ratio
+        if (analysis.total === 0) {
+          issuesAlert.style.color = "inherit"; // Default color
+        } else if (analysis.positive >= analysis.negative) {
+          issuesAlert.style.color = "#28a745"; // Bootstrap success green
+        } else {
+          issuesAlert.style.color = "#dc3545"; // Bootstrap danger red
+        }
       }
     }
   }
+
+
+
 
   // Call this when the page loads
   document.addEventListener('DOMContentLoaded', checkNewIssues);

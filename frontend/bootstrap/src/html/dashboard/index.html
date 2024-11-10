@@ -4,6 +4,9 @@
 <head>
   @@include('../layouts/head-page-meta.html', {'title': 'Home'})
   <link rel="stylesheet" href="../assets/css/plugins/jsvectormap.min.css">
+  <!-- Add these in the head section, after your other CSS includes -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.19.3/apexcharts.min.css">
   @@include('../layouts/head-css.html')
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,226 +32,415 @@
     .order-card i {
       font-size: 30px;
     }
+    .chart-explanation {
+      height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease-out;
+      opacity: 0;
+    }
+
+    .chart-explanation.active {
+      height: auto;
+      max-height: 200px;
+      opacity: 1;
+      margin-top: 1rem;
+    }
+
+    .chart-container {
+      cursor: pointer;
+    }
   </style>
 </head>
 <!-- [Head] end -->
 <!-- [Body] Start -->
 
 <body @@bodySetup>
-  @@include('../layouts/layout-vertical.html')
+@@include('../layouts/layout-vertical.html')
 
-  
-<!-- npm install bubbly-bg -->
-<!-- npm install bubbly-bg -->
-  <script src="https://cdn.jsdelivr.net/npm/bubbly-bg@1.0.0/dist/bubbly-bg.js"></script>
-  <script>bubbly({
-    colorStart: "#ffffff",
-    colorStop: "#bed9f8",
-    canvas: document.querySelector("#background"), // default is created and attached automatically
-    compose: "lighter", // default is "lighter"
-    animate: true, // default is true
-    bubbles: Math.random() * 100, // default is Math.floor((canvas.width + canvas.height) * 0.02);
-    shadowColor: "#a1c6d1", // default is #fff
-    shadowBlur: 1, // default is 4
-    fillFunc: () => `hsla(${Math.random() * 360}, 100%, 50%, ${Math.random() * 0.25})`, // default is () => `hsla(0, 0%, 100%, ${r() * 0.1})`)
-    angleFunc: () => Math.random() * Math.PI * 2, // default is this
-    velocityFunc: () => 1.5 + Math.random() * 1.5, // default is this
-    radiusFunc: () => 9 + Math.random() * 25 // default is 4 + Math.random() * width / 25
-  });
-  </script>
-<!-- npm install bubbly-bg -->
-<!-- npm install bubbly-bg -->
-  
-  <!-- [ Main Content ] start -->
-  <div class="pc-container">
-    <div class="pc-content">
-      <!-- [ Main Content ] start -->
 
-      <!-- Row 1: Overall Mood, Overall Health, Feedback Response Rate -->
-      <div class="row">
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-header">
-              <h5>Overall Mood</h5>
-            </div>
-            <div class="card-body">
-              <div id="mood-thermometer" style="height: 200px;"></div>
-            </div>
+<!-- npm install bubbly-bg -->
+<!-- npm install bubbly-bg -->
+<script src="https://cdn.jsdelivr.net/npm/bubbly-bg@1.0.0/dist/bubbly-bg.js"></script>
+<script>bubbly({
+  colorStart: "#ffffff",
+  colorStop: "#bed9f8",
+  canvas: document.querySelector("#background"), // default is created and attached automatically
+  compose: "lighter", // default is "lighter"
+  animate: true, // default is true
+  bubbles: Math.random() * 100, // default is Math.floor((canvas.width + canvas.height) * 0.02);
+  shadowColor: "#a1c6d1", // default is #fff
+  shadowBlur: 1, // default is 4
+  fillFunc: () => `hsla(${Math.random() * 360}, 100%, 50%, ${Math.random() * 0.25})`, // default is () => `hsla(0, 0%, 100%, ${r() * 0.1})`)
+  angleFunc: () => Math.random() * Math.PI * 2, // default is this
+  velocityFunc: () => 1.5 + Math.random() * 1.5, // default is this
+  radiusFunc: () => 9 + Math.random() * 25 // default is 4 + Math.random() * width / 25
+});
+</script>
+<!-- npm install bubbly-bg -->
+<!-- npm install bubbly-bg -->
+
+<!-- [ Main Content ] start -->
+<div class="pc-container">
+  <div class="pc-content">
+
+    <div class="modal fade" id="newIssuesModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">New Issues Requiring Attention</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-header">
-              <h5>Overall Health</h5>
-            </div>
-            <div class="card-body">
-              <div id="health-gauge" style="height: 200px;"></div>
-            </div>
+          <div class="modal-body" id="newIssuesBody">
+            <!-- Will be populated dynamically -->
           </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-header">
-              <h5>Feedback Response Rate</h5>
-            </div>
-            <div class="card-body">
-              <div id="feedback-rate-chart" style="height: 200px;"></div>
-            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="markModalItemsAsSeen()">Mark as Seen</button>
           </div>
         </div>
       </div>
-
-      <!-- Row 2: Employee Satisfaction Over Time, Inter-Departmental Collaboration -->
-      <div class="row">
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-header">
-              <h5>Employee Satisfaction Over Time</h5>
-            </div>
-            <div class="card-body">
-              <div id="satisfaction-chart" style="height: 250px;"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-header">
-              <h5>Inter-Departmental Collaboration</h5>
-            </div>
-            <div class="card-body">
-              <div id="collaboration-chart" style="height: 250px;"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Row 3: Burnout Levels by Department, Feedback Response Rate by Department -->
-      <div class="row">
-
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-header">
-              <h5>Feedback Response Rate by Department</h5>
-            </div>
-            <div class="card-body">
-              <div id="feedback-response-chart" style="height: 250px;"></div>
-            </div>
-          </div>
-        </div>
-      
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-header">
-              <h5>Burnout Levels by Department</h5>
-            </div>
-            <div class="card-body">
-              <div id="burnout-level-chart" style="height: 250px;"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Row 4: Department Well-being Cards -->
-      <div class="row">
-        <div class="col-md-3">
-          <div class="card bg-grd-primary order-card">
-            <div class="card-body text-center">
-              <h6 class="text-white">IT Well-being</h6>
-              <h2 class="text-end text-white">
-                <i class="feather icon-settings float-start"></i>
-                <span>85%</span>
-              </h2>
-              <p class="m-b-0">Performance<span class="float-end">82%</span></p>
-              <a href="engineering.html" class="btn btn-light w-100 mt-3">View Details</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="card bg-grd-success order-card">
-            <div class="card-body text-center">
-              <h6 class="text-white">Marketing Well-being</h6>
-              <h2 class="text-end text-white">
-                <i class="feather icon-trending-up float-start"></i>
-                <span>90%</span>
-              </h2>
-              <p class="m-b-0">Campaign Success<span class="float-end">88%</span></p>
-              <a href="marketing.html" class="btn btn-light w-100 mt-3">View Details</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="card bg-grd-warning order-card">
-            <div class="card-body text-center">
-              <h6 class="text-white">HR Well-being</h6>
-              <h2 class="text-end text-white">
-                <i class="feather icon-users float-start"></i>
-                <span>88%</span>
-              </h2>
-              <p class="m-b-0">Employee Morale<span class="float-end">85%</span></p>
-              <a href="hr.html" class="btn btn-light w-100 mt-3">View Details</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="card bg-grd-danger order-card">
-            <div class="card-body text-center">
-              <h6 class="text-white">Sales Well-being</h6>
-              <h2 class="text-end text-white">
-                <i class="feather icon-dollar-sign float-start"></i>
-                <span>92%</span>
-              </h2>
-              <p class="m-b-0">Satisfaction Rate<span class="float-end">89%</span></p>
-              <a href="sales.html" class="btn btn-light w-100 mt-3">View Details</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- [ Main Content ] end -->
     </div>
+
+
+    <!-- [ Main Content ] start -->
+
+    <!-- Row 1: Overall Mood, Overall Health, Feedback Response Rate -->
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">
+            <h5>Overall Mood</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 200px;">
+              <div id="mood-thermometer"></div>
+            </div>
+            <div class="chart-explanation mt-3 p-3 bg-light rounded">
+              <p class="text-muted mb-0">
+                This gauge shows the percentage of positive feedback across all departments. A higher percentage (green) indicates a more positive workplace mood, while lower values (red) suggest areas needing attention.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">
+            <h5>Overall Health</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 200px;">
+              <div id="health-gauge"></div>
+            </div>
+            <div class="chart-explanation mt-3 p-3 bg-light rounded">
+              <p class="text-muted mb-0">
+                <b>Overall Health</b> reflects overall organizational wellbeing, calculated from negative feedback ratios. Green (>70%) indicates good health, yellow (40-70%) suggests caution, and red (<40%) requires immediate attention.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">
+            <h5>Worker feedback response rate</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 200px;">
+              <div id="feedback-rate-chart"></div>
+            </div>
+            <div class="chart-explanation mt-3 p-3 bg-light rounded">
+              <p class="text-muted mb-0">
+                <b>Feedback Response Rate</b> (under progress) shows the percentage of workers actively providing feedback. Higher participation rates indicate better engagement and more reliable insights into company culture.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2: Employee Satisfaction Over Time, Inter-Departmental Collaboration -->
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h5>Employee Satisfaction Over Time</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 250px;">
+              <div id="satisfaction-chart"></div>
+            </div>
+            <div class="chart-explanation mt-3 p-3 bg-light rounded">
+              <p class="text-muted mb-0">
+                <b>Employee Satisfaction Over Time</b> (work still in progress) tracks employee satisfaction across months, helping identify patterns and the impact of workplace initiatives. Upward trends indicate improving satisfaction, while downward trends may require intervention.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h5>Hot-topics Across Departments</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 250px;">
+              <div id="collaboration-chart"></div>
+            </div>
+            <div class="chart-explanation mt-3 p-3 bg-light rounded">
+              <p class="text-muted mb-0">
+                <b>Hot-topics Across Departments</b> shows the top 5 reported categories across departments. Higher numbers indicate areas receiving more attention, which could represent either successful initiatives or areas needing improvement.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3: Burnout Levels by Department, Feedback Response Rate by Department -->
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h5>Department Response Rate</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 250px;">
+              <div id="feedback-response-chart"></div>
+            </div>
+            <div class="chart-explanation mt-3 p-3 bg-light rounded">
+              <p class="text-muted mb-0">
+                <b>Department Response Rate</b> compares feedback participation across departments. Variations can highlight departments that are highly engaged or those that might need encouragement to provide more feedback.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h5>Burnout Levels by Department</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 250px;">
+              <div id="burnout-level-chart"></div>
+            </div>
+            <div class="chart-explanation mt-3 p-3 bg-light rounded">
+              <p class="text-muted mb-0">
+              <b>Burnout Levels by Department</b> (work still in progress) displays burnout risk levels across departments. Higher percentages indicate increased risk of employee burnout, suggesting a need for workload review and wellness initiatives in those departments. We look for warning signs of stress in each department - things like overtime mentions, stress-related comments, and negative feedback about workload.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 4: Department Well-being Cards -->
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card bg-grd-primary order-card">
+          <div class="card-body text-center">
+            <h6 class="text-white">IT Well-being</h6>
+            <h2 class="text-end text-white">
+              <i class="feather icon-settings float-start"></i>
+              <span>85%</span>
+            </h2>
+            <p class="m-b-0">Performance<span class="float-end">82%</span></p>
+            <a href="engineering.html" class="btn btn-light w-100 mt-3">View Details</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card bg-grd-success order-card">
+          <div class="card-body text-center">
+            <h6 class="text-white">Marketing Well-being</h6>
+            <h2 class="text-end text-white">
+              <i class="feather icon-trending-up float-start"></i>
+              <span>90%</span>
+            </h2>
+            <p class="m-b-0">Campaign Success<span class="float-end">88%</span></p>
+            <a href="marketing.html" class="btn btn-light w-100 mt-3">View Details</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card bg-grd-warning order-card">
+          <div class="card-body text-center">
+            <h6 class="text-white">HR Well-being</h6>
+            <h2 class="text-end text-white">
+              <i class="feather icon-users float-start"></i>
+              <span>88%</span>
+            </h2>
+            <p class="m-b-0">Employee Morale<span class="float-end">85%</span></p>
+            <a href="hr.html" class="btn btn-light w-100 mt-3">View Details</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card bg-grd-danger order-card">
+          <div class="card-body text-center">
+            <h6 class="text-white">Sales Well-being</h6>
+            <h2 class="text-end text-white">
+              <i class="feather icon-dollar-sign float-start"></i>
+              <span>92%</span>
+            </h2>
+            <p class="m-b-0">Satisfaction Rate<span class="float-end">89%</span></p>
+            <a href="sales.html" class="btn btn-light w-100 mt-3">View Details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- [ Main Content ] end -->
   </div>
-  <!-- [ Main Content ] end -->
-  @@include('../layouts/footer-block.html') 
+</div>
+<!-- [ Main Content ] end -->
+@@include('../layouts/footer-block.html')
 
-  <!-- Include App.js -->
-  <script src="./app.js"></script>
+<!-- Include App.js -->
+<script src="./app.js"></script>
 
-  <!-- [Page Specific JS] start -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.19.3/apexcharts.min.js"></script>
-  <script>
-    // Thermometer Graph for Overall Mood
+<!-- [Page Specific JS] start -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.19.3/apexcharts.min.js"></script>
+<script>
+
+  function calculateSentimentMetrics(issues) {
+    if (!issues.length) return { positive: 0, negative: 0, total: 0 };
+    const positive = issues.filter(i => i.sentiment === 'positive').length;
+    const total = issues.length;
+    return {
+      positive: Math.round((positive / total) * 100),
+      negative: Math.round(((total - positive) / total) * 100),
+      total
+    };
+  }
+
+  // Helper function to group issues by department
+  function groupByDepartment(issues) {
+    const depts = { IT: 0, HR: 0, Sales: 0, Marketing: 0 };
+    issues.forEach(issue => {
+      if (depts.hasOwnProperty(issue.department)) {
+        depts[issue.department]++;
+      }
+    });
+    return depts;
+  }
+
+  // Update dashboard with real data
+  function updateDashboard() {
+    const issues = JSON.parse(localStorage.getItem('issues')) || [];
+    const categories = JSON.parse(localStorage.getItem('categories')) || {};
+    const metrics = calculateSentimentMetrics(issues);
+    const deptCounts = groupByDepartment(issues);
+
+
+    // 1. Overall Mood (based on positive vs negative sentiment ratio)
     var moodOptions = {
-      series: [75],
+      series: [metrics.positive],
       chart: { height: 200, type: 'radialBar' },
-      plotOptions: { radialBar: { hollow: { size: '70%' } } },
-      labels: ['Mood Level'],
-      colors: ['#28a745']
+      plotOptions: {
+        radialBar: {
+          hollow: { size: '70%' },
+          dataLabels: {
+            show: true,
+            name: { show: true, fontSize: '16px' },
+            value: {
+              show: true,
+              fontSize: '14px',
+              formatter: function(val) { return val + '%' }
+            }
+          }
+        }
+      },
+      labels: ['Positive Feedback'],
+      colors: [metrics.positive > 50 ? '#28a745' : '#dc3545']
     };
     new ApexCharts(document.querySelector("#mood-thermometer"), moodOptions).render();
 
-    // Gauge Chart for Overall Health
+    // 2. Overall Health (based on negative feedback ratio)
+    const healthScore = 100 - metrics.negative;
     var healthOptions = {
-      series: [58],
+      series: [healthScore],
       chart: { type: 'radialBar', height: 200 },
-      plotOptions: { radialBar: { startAngle: -135, endAngle: 135, hollow: { size: '70%' } } },
-      labels: ['Health Level']
+      plotOptions: {
+        radialBar: {
+          startAngle: -135,
+          endAngle: 135,
+          hollow: { size: '70%' },
+          dataLabels: {
+            name: { show: true, fontSize: '16px' },
+            value: {
+              show: true,
+              fontSize: '14px',
+              formatter: function(val) { return val + '%' }
+            }
+          }
+        }
+      },
+      labels: ['Health Score'],
+      colors: [healthScore > 70 ? '#28a745' : healthScore > 40 ? '#ffc107' : '#dc3545']
     };
     new ApexCharts(document.querySelector("#health-gauge"), healthOptions).render();
 
-    // Feedback Response Rate
+    // 3. Feedback Response Rate (based on department participation)
+    const activeCount = Object.values(deptCounts).filter(count => count > 0).length;
+    const responseRate = Math.round((activeCount / Object.keys(deptCounts).length) * 100);
     var feedbackOptions = {
-      series: [85],
+      series: [responseRate],
       chart: { type: 'radialBar', height: 200 },
-      plotOptions: { radialBar: { hollow: { size: '70%' } } },
+      plotOptions: {
+        radialBar: {
+          hollow: { size: '70%' },
+          dataLabels: {
+            name: { show: true, fontSize: '16px' },
+            value: {
+              show: true,
+              formatter: function(val) { return val + '%' }
+            }
+          }
+        }
+      },
       labels: ['Response Rate'],
       colors: ['#ffc107']
     };
     new ApexCharts(document.querySelector("#feedback-rate-chart"), feedbackOptions).render();
+
+    // 4. Department Response Distribution
+    const deptSeries = Object.values(deptCounts);
+    var feedbackDepartmentOptions = {
+      series: [{
+        name: 'Feedback Count',
+        data: deptSeries
+      }],
+      chart: { type: 'bar', height: 250 },
+      xaxis: { categories: Object.keys(deptCounts) },
+      colors: ['#007bff'],
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          horizontal: false,
+          dataLabels: {
+            position: 'top'
+          }
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        offsetY: -20,
+        style: {
+          fontSize: '12px',
+          colors: ["#304758"]
+        }
+      }
+    };
+    new ApexCharts(document.querySelector("#feedback-response-chart"), feedbackDepartmentOptions).render();
+
 
     // Employee Satisfaction Over Time
     var satisfactionOptions = {
@@ -259,64 +451,274 @@
     };
     new ApexCharts(document.querySelector("#satisfaction-chart"), satisfactionOptions).render();
 
-    // Inter-Departmental Collaboration
+    // 5. Category Distribution (Top 5 reported categories)
+    // Count frequency of each category
+    const categoryFrequency = issues.reduce((acc, issue) => {
+      if (issue.category) { // Make sure category exists
+        acc[issue.category] = (acc[issue.category] || 0) + 1;
+      }
+      return acc;
+    }, {});
+
+// Convert to array, sort by frequency, and take top 5
+    const categoryRankings = Object.entries(categoryFrequency)
+            .map(([category, count]) => ({
+              name: category,
+              count: count
+            }))
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 5);
+
     var collaborationOptions = {
-      series: [{ name: 'Collaboration', data: [30, 40, 45, 50, 60, 70] }],
-      chart: { type: 'bar', height: 250 },
-      xaxis: { categories: ['Mkt', 'HR', 'Sales', 'Ops', 'IT'] },
-      colors: ['#28a745']
+      series: [{
+        name: 'Reports',
+        data: categoryRankings.map(cat => cat.count)
+      }],
+      chart: {
+        type: 'bar',
+        height: 250,
+        toolbar: {
+          show: false
+        }
+      },
+      xaxis: {
+        categories: categoryRankings.map(cat => cat.name),
+        labels: {
+          style: {
+            fontSize: '12px'
+          }
+        }
+      },
+      colors: ['#28a745'],
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          horizontal: true
+        }
+      }
     };
     new ApexCharts(document.querySelector("#collaboration-chart"), collaborationOptions).render();
+  }
 
-    // Feedback Response Rate by Department Chart
-    var feedbackDepartmentOptions = {
-      series: [{ name: 'Response Rate', data: [45, 38, 50, 65, 80] }],
-      chart: { type: 'bar', height: 250 },
-      xaxis: { categories: ['Marketing', 'HR', 'Sales', 'IT', 'Engineering'] },
-      colors: ['#ffc107']
-    };
-    new ApexCharts(document.querySelector("#feedback-response-chart"), feedbackDepartmentOptions).render();
 
-    // Burnout Levels by Department Chart
-    var burnoutOptions = {
-      series: [60, 70, 50, 40, 55],
-      chart: { type: 'radialBar', height: 250 },
-      labels: ['Engineering', 'Sales', 'Marketing', 'HR', 'IT'],
-      colors: ['#dc3545', '#ffc107', '#007bff', '#28a745', '#6c757d']
-    };
-    new ApexCharts(document.querySelector("#burnout-level-chart"), burnoutOptions).render();
+  // Burnout Levels by Department Chart
+  var burnoutOptions = {
+    series: [60, 70, 50, 40, 55],
+    chart: { type: 'radialBar', height: 250 },
+    labels: ['Engineering', 'Sales', 'Marketing', 'HR', 'IT'],
+    colors: ['#dc3545', '#ffc107', '#007bff', '#28a745', '#6c757d']
+  };
+  new ApexCharts(document.querySelector("#burnout-level-chart"), burnoutOptions).render();
 
-    const initialCategories = {
-        underused_skills: { name: "Under-use of Skills", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
-        excessive_workload: { name: "Excessive Workload", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
-        long_hours: { name: "Long, Unsocial or Inflexible Hours", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
-        lack_of_control: { name: "Lack of Control Over Job Design", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
-        unsafe_conditions: { name: "Unsafe or Poor Physical Conditions", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
-        negative_culture: { name: "Negative Organizational Culture", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
-        limited_support: { name: "Limited Support from Colleagues", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
-        violence_harassment: { name: "Violence, Harassment, or Bullying", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
-        discrimination: { name: "Discrimination and Exclusion", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
-        unclear_role: { name: "Unclear Job Role", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
-        under_promotion: { name: "Under- or Over-promotion", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
-        job_insecurity: { name: "Job Insecurity or Inadequate Pay", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 },
-        work_home_conflict: { name: "Conflicting Home/Work Demands", positiveFeedback: 0, negativeFeedback: 0, ranking: 0 }
+
+</script>
+
+<script>
+  function updateDashboardNotifications() {
+    const progressTracker = JSON.parse(localStorage.getItem('progressTracker')) || [];
+    const departmentEmojis = {
+      'IT': '💻',
+      'HR': '👥',
+      'Sales': '💰',
+      'Marketing': '📢'
     };
 
-    if (!localStorage.getItem("categories")) localStorage.setItem("categories", JSON.stringify(initialCategories));
-    if (!localStorage.getItem("issues")) localStorage.setItem("issues", JSON.stringify([]));
-    if (!localStorage.getItem("progressTracker")) localStorage.setItem("progressTracker", JSON.stringify([]));
-    if (!localStorage.getItem("visibilitySettings")) localStorage.setItem("visibilitySettings", JSON.stringify({ visibilityOption: "company-wide" }));
+    const departmentPages = {
+      'IT': 'engineering.html',
+      'HR': 'hr.html',
+      'Sales': 'sales.html',
+      'Marketing': 'marketing.html'
+    };
 
-    // Populate categories in the feedback form
-    const categorySelect = document.getElementById("feedback-category");
-    Object.keys(initialCategories).forEach(categoryKey => {
-        const option = document.createElement("option");
-        option.value = categoryKey;
-        option.textContent = initialCategories[categoryKey].name;
-        categorySelect.appendChild(option);
+    // Get all unseen items
+    const unseenItems = progressTracker.filter(item => !item.seen && item.status === 'To Do');
+
+    if (unseenItems.length > 0) {
+      // Get 3 random unseen items
+      const randomItems = unseenItems
+              .sort(() => 0.5 - Math.random())
+              .slice(0, 3);
+
+      // Calculate overall sentiment
+      const positiveCount = randomItems.filter(item => item.sentiment === 'positive').length;
+      const isOverallPositive = positiveCount >= randomItems.length / 2;
+
+      // Get modal content
+      const modalContent = document.querySelector('#newIssuesModal .modal-content');
+      // Populate modal
+      const modalBody = document.getElementById('newIssuesBody');
+      if (modalBody) {
+        modalBody.innerHTML = randomItems.map(item => `
+        <div class="alert ${item.sentiment === 'positive' ? 'alert-success' : 'alert-danger'}"
+             style="background-color: ${item.sentiment === 'positive' ? '#7add91' : '#ec7d87'}"
+             role="alert"
+             data-issue-id="${item.issueId}">
+          <div class="d-flex justify-content-between align-items-center">
+            <h6 class="alert-heading mb-1">
+              ${departmentEmojis[item.department] || ''} ${item.department}
+            </h6>
+            <a href="${departmentPages[item.department]}"
+               class="btn btn-sm  btn-light">
+              View Department
+            </a>
+          </div>
+          <p class="mb-0">${item.summary}</p>
+          <div class="mt-2">
+            <small class="text-muted">Category: ${item.category}</small>
+            <small class="text-muted d-block">Date: ${item.date}</small>
+          </div>
+        </div>
+      `).join('');
+
+        // Show modal
+        const modalElement = document.getElementById('newIssuesModal');
+        if (typeof bootstrap !== 'undefined') {
+          const modal = new bootstrap.Modal(modalElement);
+          modal.show();
+        }
+      }
+    }
+  }
+
+
+  // Function to count unseen issues
+  function getUnseenIssuesAnalysis() {
+    const progressTracker = JSON.parse(localStorage.getItem('progressTracker')) || [];
+    const unseenIssues = progressTracker.filter(issue => !issue.seen);
+
+    const analysis = unseenIssues.reduce((acc, issue) => {
+      issue.sentiment === 'positive' ? acc.positive++ : acc.negative++;
+      return acc;
+    }, { positive: 0, negative: 0, total: 0 });
+
+    analysis.total = unseenIssues.length;
+    return analysis;
+  }
+
+  // Your alert script
+  function checkNewIssues() {
+    const analysis = getUnseenIssuesAnalysis();
+    console.log("Checking unseen issues:", analysis);
+
+    if (analysis.total > 0) {
+      const issuesAlert = document.getElementById('issues-alert');
+      if (issuesAlert) {
+        issuesAlert.textContent = `Company Health (${analysis.total})`;
+
+        // Set color based on sentiment ratio
+        if (analysis.total === 0) {
+          issuesAlert.style.color = "inherit"; // Default color
+        } else if (analysis.positive >= analysis.negative) {
+          issuesAlert.style.color = "#28a745"; // Bootstrap success green
+        } else {
+          issuesAlert.style.color = "#dc3545"; // Bootstrap danger red
+        }
+      }
+    }
+  }
+  function updateDepartmentCounts() {
+    const progressTracker = JSON.parse(localStorage.getItem('progressTracker')) || [];
+
+    // Count unseen issues by department
+    const unseenByDept = progressTracker.reduce((acc, item) => {
+      if (!item.seen && item.status === 'To Do') {
+        acc[item.department] = (acc[item.department] || 0) + 1;
+      }
+      return acc;
+    }, {});
+
+    // Update each card title
+    document.querySelectorAll('.card h6.text-white').forEach(h6 => {
+      const text = h6.textContent.trim();
+      const baseName = text.split('(')[0].trim(); // Get the base name without any existing count
+
+      if (text.includes('IT Well-being')) {
+        const count = unseenByDept['IT'] || 0;
+        h6.innerHTML = count > 0 ?
+                `${baseName} <span style="color: #ffc107">(${count})</span>` :
+                baseName;
+      } else if (text.includes('Marketing Well-being')) {
+        const count = unseenByDept['Marketing'] || 0;
+        h6.innerHTML = count > 0 ?
+                `${baseName} <span style="color: #ffc107">(${count})</span>` :
+                baseName;
+      } else if (text.includes('HR Well-being')) {
+        const count = unseenByDept['HR'] || 0;
+        h6.innerHTML = count > 0 ?
+                `${baseName} <span style="color: #ffc107">(${count})</span>` :
+                baseName;
+      } else if (text.includes('Sales Well-being')) {
+        const count = unseenByDept['Sales'] || 0;
+        h6.innerHTML = count > 0 ?
+                `${baseName} <span style="color: #ffc107">(${count})</span>` :
+                baseName;
+      }
+    });
+  }
+
+  // Modified markModalItemsAsSeen function
+  function markModalItemsAsSeen() {
+    const progressTracker = JSON.parse(localStorage.getItem('progressTracker')) || [];
+    const modalItems = document.querySelectorAll('#newIssuesBody .alert');
+
+    // Mark displayed items as seen
+    const seenIds = Array.from(modalItems).map(el => el.dataset.issueId);
+
+    const updated = progressTracker.map(item => {
+      if (seenIds.includes(item.issueId.toString())) {
+        return { ...item, seen: true };
+      }
+      return item;
     });
 
-  </script>
+    localStorage.setItem('progressTracker', JSON.stringify(updated));
+
+    // Close modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('newIssuesModal'));
+    if (modal) {
+      modal.hide();
+    }
+
+    // Update all counters
+    checkNewIssues();
+    updateDepartmentCounts();
+  }
+
+  // Initialization
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      updateDashboard();
+      updateDepartmentCounts();
+      checkNewIssues();
+      updateDashboardNotifications();
+    }, 100);
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add click handlers to all chart containers
+    const chartContainers = document.querySelectorAll('.chart-container');
+
+    chartContainers.forEach(container => {
+      container.addEventListener('click', function() {
+        // Find the associated explanation
+        const explanation = this.nextElementSibling;
+
+        // Toggle the active class
+        explanation.classList.toggle('active');
+
+        // Optional: Close other open explanations
+        document.querySelectorAll('.chart-explanation.active').forEach(el => {
+          if (el !== explanation) {
+            el.classList.remove('active');
+          }
+        });
+      });
+    });
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+
 </body>
 <!-- [Body] end -->
 </html>

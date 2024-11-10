@@ -90,6 +90,7 @@
 
 <div class="pc-container">
   <div class="pc-content">
+
     <div class="container">
       <!-- Header Section -->
       <div class="header-section">
@@ -99,6 +100,8 @@
         <h2>IT Department Dashboard</h2>
         <p>Monitoring team well-being and feedback metrics</p>
       </div>
+
+      <div id="unseenIssuesSection" class="container mb-2"></div>
 
       <!-- Metric Cards -->
       <div class="metric-cards">
@@ -171,6 +174,96 @@
 <!-- Scripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.19.3/apexcharts.min.js"></script>
 <script>
+  function showDepartmentUnseenIssues() {
+    const progressTracker = JSON.parse(localStorage.getItem('progressTracker')) || [];
+    const departmentEmojis = {
+      'IT': '💻',
+      'HR': '👥',
+      'Sales': '💰',
+      'Marketing': '📢'
+    };
+
+    // Get all unseen items for IT department
+    const unseenItems = progressTracker.filter(item =>
+            !item.seen &&
+            item.status === 'To Do' &&
+            item.department === 'IT'
+    );
+
+    const unseenSection = document.getElementById('unseenIssuesSection');
+
+    if (unseenItems.length > 0) {
+      unseenSection.innerHTML = `
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Unaddressed Issues (${unseenItems.length})</h5>
+          <button onclick="markAllAsSeen()" class="btn btn-primary btn-sm">
+            Mark All as Seen
+          </button>
+        </div>
+        <div class="card-body">
+          ${unseenItems.map(item => `
+            <div class="alert mb-3"
+                 style="background-color: ${item.sentiment === 'positive' ? '#7add91' : '#ec7d87'}; margin-bottom: 10px; color: white;"
+                 role="alert"
+                 data-issue-id="${item.issueId}">
+              <div class="d-flex justify-content-between align-items-center">
+                <h6 class="alert-heading mb-1">
+                  ${departmentEmojis[item.department] || ''} ${item.category}
+                </h6>
+                <button onclick="markItemAsSeen(${item.issueId})"
+                        class="btn btn-sm btn-light">
+                  Mark as Seen
+                </button>
+              </div>
+              <p class="mb-0">${item.summary}</p>
+              <div class="mt-2">
+                <small style="color: rgba(255,255,255,0.8)">Date: ${item.date}</small>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+    } else {
+      unseenSection.innerHTML = ''; // Clear the section if no unseen items
+    }
+  }
+
+  function markItemAsSeen(issueId) {
+    const progressTracker = JSON.parse(localStorage.getItem('progressTracker')) || [];
+    const updated = progressTracker.map(item => {
+      if (item.issueId === issueId) {
+        return { ...item, seen: true };
+      }
+      return item;
+    });
+    localStorage.setItem('progressTracker', JSON.stringify(updated));
+    showDepartmentUnseenIssues();
+    updateDepartmentDashboard('IT');
+  }
+
+  function markAllAsSeen() {
+    const progressTracker = JSON.parse(localStorage.getItem('progressTracker')) || [];
+    const updated = progressTracker.map(item => {
+      if (item.department === 'IT' && !item.seen) {
+        return { ...item, seen: true };
+      }
+      return item;
+    });
+    localStorage.setItem('progressTracker', JSON.stringify(updated));
+    showDepartmentUnseenIssues();
+    updateDepartmentDashboard('IT');
+  }
+
+  // Add this to your existing DOMContentLoaded listener
+  document.addEventListener('DOMContentLoaded', () => {
+    showDepartmentUnseenIssues();
+    updateDepartmentDashboard('IT');
+  });
+</script>
+<script>
+
   function updateDepartmentDashboard(department = 'IT') {
     // Clear existing charts
     document.querySelectorAll('[id$="-chart"]').forEach(chart => {
@@ -489,7 +582,7 @@
           max: 100,
           labels: {
             formatter: function(val) {
-              return val + '%';
+              return '';
             }
           }
         },

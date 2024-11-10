@@ -2,7 +2,7 @@
 <html lang="en">
 <!-- [Head] start -->
 <head>
-  @@include('../layouts/head-page-meta.html', {'title': 'Company Health | Home'})
+  @@include('../layouts/head-page-meta.html', {'title': 'Home'})
   <link rel="stylesheet" href="../assets/css/plugins/jsvectormap.min.css">
   <!-- Add these in the head section, after your other CSS includes -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -31,6 +31,23 @@
     }
     .order-card i {
       font-size: 30px;
+    }
+    .chart-explanation {
+      height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease-out;
+      opacity: 0;
+    }
+
+    .chart-explanation.active {
+      height: auto;
+      max-height: 200px;
+      opacity: 1;
+      margin-top: 1rem;
+    }
+
+    .chart-container {
+      cursor: pointer;
     }
   </style>
 </head>
@@ -95,7 +112,14 @@
             <h5>Overall Mood</h5>
           </div>
           <div class="card-body">
-            <div id="mood-thermometer" style="height: 200px;"></div>
+            <div class="chart-container" style="height: 200px;">
+              <div id="mood-thermometer"></div>
+            </div>
+            <div class="chart-explanation mt-3 p-3 bg-light rounded">
+              <p class="text-muted mb-0">
+                This gauge shows the percentage of positive feedback across all departments. A higher percentage (green) indicates a more positive workplace mood, while lower values (red) suggest areas needing attention.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -106,7 +130,14 @@
             <h5>Overall Health</h5>
           </div>
           <div class="card-body">
-            <div id="health-gauge" style="height: 200px;"></div>
+            <div class="chart-container" style="height: 200px;">
+              <div id="health-gauge"></div>
+            </div>
+            <div class="chart-explanation mt-3 p-3 bg-light rounded">
+              <p class="text-muted mb-0">
+                <b>Overall Health</b> reflects overall organizational wellbeing, calculated from negative feedback ratios. Green (>70%) indicates good health, yellow (40-70%) suggests caution, and red (<40%) requires immediate attention.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -114,10 +145,17 @@
       <div class="col-md-4">
         <div class="card">
           <div class="card-header">
-            <h5>Feedback Response Rate</h5>
+            <h5>Worker feedback response rate</h5>
           </div>
           <div class="card-body">
-            <div id="feedback-rate-chart" style="height: 200px;"></div>
+            <div class="chart-container" style="height: 200px;">
+              <div id="feedback-rate-chart"></div>
+            </div>
+            <div class="chart-explanation mt-3 p-3 bg-light rounded">
+              <p class="text-muted mb-0">
+                <b>Feedback Response Rate</b> (under progress) shows the percentage of workers actively providing feedback. Higher participation rates indicate better engagement and more reliable insights into company culture.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -131,7 +169,14 @@
             <h5>Employee Satisfaction Over Time</h5>
           </div>
           <div class="card-body">
-            <div id="satisfaction-chart" style="height: 250px;"></div>
+            <div class="chart-container" style="height: 250px;">
+              <div id="satisfaction-chart"></div>
+            </div>
+            <div class="chart-explanation mt-3 p-3 bg-light rounded">
+              <p class="text-muted mb-0">
+                <b>Employee Satisfaction Over Time</b> (work still in progress) tracks employee satisfaction across months, helping identify patterns and the impact of workplace initiatives. Upward trends indicate improving satisfaction, while downward trends may require intervention.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -139,10 +184,17 @@
       <div class="col-md-6">
         <div class="card">
           <div class="card-header">
-            <h5>Inter-Departmental Collaboration</h5>
+            <h5>Hot-topics Across Departments</h5>
           </div>
           <div class="card-body">
-            <div id="collaboration-chart" style="height: 250px;"></div>
+            <div class="chart-container" style="height: 250px;">
+              <div id="collaboration-chart"></div>
+            </div>
+            <div class="chart-explanation mt-3 p-3 bg-light rounded">
+              <p class="text-muted mb-0">
+                <b>Hot-topics Across Departments</b> shows the top 5 reported categories across departments. Higher numbers indicate areas receiving more attention, which could represent either successful initiatives or areas needing improvement.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -150,14 +202,20 @@
 
     <!-- Row 3: Burnout Levels by Department, Feedback Response Rate by Department -->
     <div class="row">
-
       <div class="col-md-6">
         <div class="card">
           <div class="card-header">
-            <h5>Feedback Response Rate by Department</h5>
+            <h5>Department Response Rate</h5>
           </div>
           <div class="card-body">
-            <div id="feedback-response-chart" style="height: 250px;"></div>
+            <div class="chart-container" style="height: 250px;">
+              <div id="feedback-response-chart"></div>
+            </div>
+            <div class="chart-explanation mt-3 p-3 bg-light rounded">
+              <p class="text-muted mb-0">
+                <b>Department Response Rate</b> compares feedback participation across departments. Variations can highlight departments that are highly engaged or those that might need encouragement to provide more feedback.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -168,7 +226,14 @@
             <h5>Burnout Levels by Department</h5>
           </div>
           <div class="card-body">
-            <div id="burnout-level-chart" style="height: 250px;"></div>
+            <div class="chart-container" style="height: 250px;">
+              <div id="burnout-level-chart"></div>
+            </div>
+            <div class="chart-explanation mt-3 p-3 bg-light rounded">
+              <p class="text-muted mb-0">
+              <b>Burnout Levels by Department</b> (work still in progress) displays burnout risk levels across departments. Higher percentages indicate increased risk of employee burnout, suggesting a need for workload review and wellness initiatives in those departments. We look for warning signs of stress in each department - things like overtime mentions, stress-related comments, and negative feedback about workload.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -341,7 +406,7 @@
           }
         }
       },
-      labels: ['Dept. Participation'],
+      labels: ['Response Rate'],
       colors: ['#ffc107']
     };
     new ApexCharts(document.querySelector("#feedback-rate-chart"), feedbackOptions).render();
@@ -387,10 +452,19 @@
     new ApexCharts(document.querySelector("#satisfaction-chart"), satisfactionOptions).render();
 
     // 5. Category Distribution (Top 5 reported categories)
-    const categoryRankings = Object.entries(categories)
-            .map(([key, data]) => ({
-              name: data.name,
-              count: data.positiveFeedback + data.negativeFeedback
+    // Count frequency of each category
+    const categoryFrequency = issues.reduce((acc, issue) => {
+      if (issue.category) { // Make sure category exists
+        acc[issue.category] = (acc[issue.category] || 0) + 1;
+      }
+      return acc;
+    }, {});
+
+// Convert to array, sort by frequency, and take top 5
+    const categoryRankings = Object.entries(categoryFrequency)
+            .map(([category, count]) => ({
+              name: category,
+              count: count
             }))
             .sort((a, b) => b.count - a.count)
             .slice(0, 5);
@@ -400,7 +474,13 @@
         name: 'Reports',
         data: categoryRankings.map(cat => cat.count)
       }],
-      chart: { type: 'bar', height: 250 },
+      chart: {
+        type: 'bar',
+        height: 250,
+        toolbar: {
+          show: false
+        }
+      },
       xaxis: {
         categories: categoryRankings.map(cat => cat.name),
         labels: {
@@ -430,8 +510,6 @@
   };
   new ApexCharts(document.querySelector("#burnout-level-chart"), burnoutOptions).render();
 
-  // Call update when page loads
-  document.addEventListener('DOMContentLoaded', updateDashboard);
 
 </script>
 
@@ -445,110 +523,198 @@
       'Marketing': '📢'
     };
 
-    // Get unseenItems by department
-    const unseenByDept = progressTracker.reduce((acc, item) => {
-      if (!item.seen && item.status === 'To Do') {
-        acc[item.department] = acc[item.department] || [];
-        acc[item.department].push(item);
-      }
-      return acc;
-    }, {});
-
-    // Update department cards with unseen counts
-    Object.entries(unseenByDept).forEach(([dept, items]) => {
-      const deptHeader = document.querySelector(`[data-department="${dept}"]`);
-      if (deptHeader) {
-        const currentText = deptHeader.textContent.split('(')[0].trim();
-        deptHeader.textContent = `${currentText} (${items.length})`;
-      }
-    });
+    const departmentPages = {
+      'IT': 'engineering.html',
+      'HR': 'hr.html',
+      'Sales': 'sales.html',
+      'Marketing': 'marketing.html'
+    };
 
     // Get all unseen items
     const unseenItems = progressTracker.filter(item => !item.seen && item.status === 'To Do');
 
-    // If there are unseen items, show modal with random 3
     if (unseenItems.length > 0) {
       // Get 3 random unseen items
       const randomItems = unseenItems
               .sort(() => 0.5 - Math.random())
               .slice(0, 3);
 
+      // Calculate overall sentiment
+      const positiveCount = randomItems.filter(item => item.sentiment === 'positive').length;
+      const isOverallPositive = positiveCount >= randomItems.length / 2;
+
+      // Get modal content
+      const modalContent = document.querySelector('#newIssuesModal .modal-content');
       // Populate modal
       const modalBody = document.getElementById('newIssuesBody');
       if (modalBody) {
         modalBody.innerHTML = randomItems.map(item => `
-                <div class="alert ${item.sentiment === 'positive' ? 'alert-success' : 'alert-danger'}"
-                     role="alert"
-                     data-issue-id="${item.issueId}">
-                    <h6 class="alert-heading">
-                        ${departmentEmojis[item.department] || ''} ${item.department}
-                    </h6>
-                    <p class="mb-0">${item.summary}</p>
-                    <small class="text-muted">Category: ${item.category}</small>
-                    <small class="text-muted d-block">Date: ${item.date}</small>
-                </div>
-            `).join('');
+        <div class="alert ${item.sentiment === 'positive' ? 'alert-success' : 'alert-danger'}"
+             style="background-color: ${item.sentiment === 'positive' ? '#7add91' : '#ec7d87'}"
+             role="alert"
+             data-issue-id="${item.issueId}">
+          <div class="d-flex justify-content-between align-items-center">
+            <h6 class="alert-heading mb-1">
+              ${departmentEmojis[item.department] || ''} ${item.department}
+            </h6>
+            <a href="${departmentPages[item.department]}"
+               class="btn btn-sm  btn-light">
+              View Department
+            </a>
+          </div>
+          <p class="mb-0">${item.summary}</p>
+          <div class="mt-2">
+            <small class="text-muted">Category: ${item.category}</small>
+            <small class="text-muted d-block">Date: ${item.date}</small>
+          </div>
+        </div>
+      `).join('');
 
-
-        // Initialize and show modal
+        // Show modal
         const modalElement = document.getElementById('newIssuesModal');
         if (typeof bootstrap !== 'undefined') {
           const modal = new bootstrap.Modal(modalElement);
           modal.show();
-        } else {
-          modalElement.style.display = 'block';
-          modalElement.classList.add('show');
         }
       }
     }
   }
 
+
+  // Function to count unseen issues
+  function getUnseenIssuesAnalysis() {
+    const progressTracker = JSON.parse(localStorage.getItem('progressTracker')) || [];
+    const unseenIssues = progressTracker.filter(issue => !issue.seen);
+
+    const analysis = unseenIssues.reduce((acc, issue) => {
+      issue.sentiment === 'positive' ? acc.positive++ : acc.negative++;
+      return acc;
+    }, { positive: 0, negative: 0, total: 0 });
+
+    analysis.total = unseenIssues.length;
+    return analysis;
+  }
+
+  // Your alert script
+  function checkNewIssues() {
+    const analysis = getUnseenIssuesAnalysis();
+    console.log("Checking unseen issues:", analysis);
+
+    if (analysis.total > 0) {
+      const issuesAlert = document.getElementById('issues-alert');
+      if (issuesAlert) {
+        issuesAlert.textContent = `Company Health (${analysis.total})`;
+
+        // Set color based on sentiment ratio
+        if (analysis.total === 0) {
+          issuesAlert.style.color = "inherit"; // Default color
+        } else if (analysis.positive >= analysis.negative) {
+          issuesAlert.style.color = "#28a745"; // Bootstrap success green
+        } else {
+          issuesAlert.style.color = "#dc3545"; // Bootstrap danger red
+        }
+      }
+    }
+  }
+  function updateDepartmentCounts() {
+    const progressTracker = JSON.parse(localStorage.getItem('progressTracker')) || [];
+
+    // Count unseen issues by department
+    const unseenByDept = progressTracker.reduce((acc, item) => {
+      if (!item.seen && item.status === 'To Do') {
+        acc[item.department] = (acc[item.department] || 0) + 1;
+      }
+      return acc;
+    }, {});
+
+    // Update each card title
+    document.querySelectorAll('.card h6.text-white').forEach(h6 => {
+      const text = h6.textContent.trim();
+      const baseName = text.split('(')[0].trim(); // Get the base name without any existing count
+
+      if (text.includes('IT Well-being')) {
+        const count = unseenByDept['IT'] || 0;
+        h6.innerHTML = count > 0 ?
+                `${baseName} <span style="color: #ffc107">(${count})</span>` :
+                baseName;
+      } else if (text.includes('Marketing Well-being')) {
+        const count = unseenByDept['Marketing'] || 0;
+        h6.innerHTML = count > 0 ?
+                `${baseName} <span style="color: #ffc107">(${count})</span>` :
+                baseName;
+      } else if (text.includes('HR Well-being')) {
+        const count = unseenByDept['HR'] || 0;
+        h6.innerHTML = count > 0 ?
+                `${baseName} <span style="color: #ffc107">(${count})</span>` :
+                baseName;
+      } else if (text.includes('Sales Well-being')) {
+        const count = unseenByDept['Sales'] || 0;
+        h6.innerHTML = count > 0 ?
+                `${baseName} <span style="color: #ffc107">(${count})</span>` :
+                baseName;
+      }
+    });
+  }
+
+  // Modified markModalItemsAsSeen function
   function markModalItemsAsSeen() {
     const progressTracker = JSON.parse(localStorage.getItem('progressTracker')) || [];
     const modalItems = document.querySelectorAll('#newIssuesBody .alert');
-    console.log("works 4")
 
     // Mark displayed items as seen
     const seenIds = Array.from(modalItems).map(el => el.dataset.issueId);
 
-    progressTracker.forEach(item => {
+    const updated = progressTracker.map(item => {
       if (seenIds.includes(item.issueId.toString())) {
-        console.log("works 5")
-        item.seen = true;
+        return { ...item, seen: true };
       }
+      return item;
     });
 
-    localStorage.setItem('progressTracker', JSON.stringify(progressTracker));
+    localStorage.setItem('progressTracker', JSON.stringify(updated));
 
     // Close modal
     const modal = bootstrap.Modal.getInstance(document.getElementById('newIssuesModal'));
-    modal.hide();
-
-    // Update department counters
-    updateDashboardNotifications();
-  }
-
-
-  // Your alert script
-  function checkNewIssues() {
-    const issueCounter = parseInt(localStorage.getItem('issueCounter') || '0');
-    console.log("works 6")
-    if (issueCounter > 0) {
-      console.log("works 7")
-      const issuesAlert = document.getElementById('issues-alert');
-      if (issuesAlert) {
-        issuesAlert.textContent = "Top Issues (" + issueCounter.toString() + ")";
-        issuesAlert.style.color = "red";
-      }
+    if (modal) {
+      modal.hide();
     }
+
+    // Update all counters
+    checkNewIssues();
+    updateDepartmentCounts();
   }
 
-  // Call this when the page loads
-  document.addEventListener('DOMContentLoaded', checkNewIssues);
+  // Initialization
   document.addEventListener('DOMContentLoaded', () => {
-    updateDashboardNotifications();
+    setTimeout(() => {
+      updateDashboard();
+      updateDepartmentCounts();
+      checkNewIssues();
+      updateDashboardNotifications();
+    }, 100);
   });
 
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add click handlers to all chart containers
+    const chartContainers = document.querySelectorAll('.chart-container');
+
+    chartContainers.forEach(container => {
+      container.addEventListener('click', function() {
+        // Find the associated explanation
+        const explanation = this.nextElementSibling;
+
+        // Toggle the active class
+        explanation.classList.toggle('active');
+
+        // Optional: Close other open explanations
+        document.querySelectorAll('.chart-explanation.active').forEach(el => {
+          if (el !== explanation) {
+            el.classList.remove('active');
+          }
+        });
+      });
+    });
+  });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>

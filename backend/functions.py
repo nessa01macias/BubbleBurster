@@ -5,6 +5,9 @@ from dotenv import load_dotenv
 import vertexai
 import json
 import os
+import re
+import markdown
+
 
 # Load environment variables from .env file
 load_dotenv()
@@ -29,26 +32,56 @@ categories = {
     "work_home_conflict": "Conflicting Home/Work Demands"
 }
 
+aava_services = {
+    "burnout": {
+        "service_name": "Masters of Recovery",
+        "description": "Learn methods to recover both during and after the workday. Suitable for those struggling with stress, burnout, or athletes seeking better recovery.",
+        "link": "https://www.aava.fi/en/online-coachings/masters-of-recovery/"
+    },
+    "nutrition": {
+        "service_name": "Easy Nutrition",
+        "description": "Build a balanced eating model without miracle diets. Ideal for those interested in the basics of nutrition, weight loss, or seeking clarity on nutrition.",
+        "link": "https://www.aava.fi/en/online-coachings/easy-nutrition/"
+    },
+    "energy": {
+        "service_name": "Energy for Work",
+        "description": "Gain motivation and tools to improve work enthusiasm and well-being. Designed for anyone seeking more energy or showing early signs of burnout.",
+        "link": "https://www.aava.fi/en/online-coachings/energy-for-work/"
+    },
+    "stress": {
+        "service_name": "Psychological Flexibility",
+        "description": "Learn techniques for managing emotions, thoughts, and reactions. Ideal for anyone looking to improve mental well-being or reduce anxiety.",
+        "link": "https://www.aava.fi/en/online-coachings/psychological-flexibility/"
+    },
+    "wellbeing_basics": {
+        "service_name": "Alphabets of Wellbeing",
+        "description": "Understand the basics of sleep, nutrition, and exercise to make lasting lifestyle changes. Perfect for those interested in fundamental well-being practices.",
+        "link": "https://www.aava.fi/en/online-coachings/alphabets-of-wellbeing/"
+    },
+    "exercise": {
+        "service_name": "Start Exercising",
+        "description": "Gain practical knowledge to improve fitness easily and anywhere. Suitable for anyone wanting to start exercising or master basics in endurance, strength, and flexibility.",
+        "link": "https://www.aava.fi/en/online-coachings/start-exercising/"
+    },
+    "energy_management": {
+        "service_name": "Keys to Energy Management",
+        "description": "Learn to manage physical, social, and mental energy for improved endurance. Great for those seeking different approaches to enhance their well-being.",
+        "link": "https://www.aava.fi/en/online-coachings/keys-to-energy-management/"
+    },
+    "sleep": {
+        "service_name": "The Most Important Sleep",
+        "description": "Understand techniques to improve both sleep quality and quantity, suitable for those looking to boost energy and improve recovery.",
+        "link": "https://www.aava.fi/en/online-coachings/the-most-important-sleep/"
+    }
+}
 
-def load_examples():
-    examples = []
-    labels = []
 
-    # Load chat examples
-    chat_files = Path("backend/examples/chats").glob("*.txt")
-    for file_path in chat_files:
-        with open(file_path, "r") as file:
-            examples.append(file.read())
-            labels.append("Chat")
-
-    # Load meeting examples
-    meeting_files = Path("backend/examples/meetings").glob("*.txt")
-    for file_path in meeting_files:
-        with open(file_path, "r") as file:
-            examples.append(file.read())
-            labels.append("Meeting")
-
-    return examples, labels
+def find_relevant_service(issue_details: str) -> dict:
+    for keyword, service_info in aava_services.items():
+        # Match whole words or close variations
+        if re.search(rf'\b{keyword}\b', issue_details.lower()):
+            return service_info
+    return None
 
 
 def classify_input(content: str, categories: dict) -> dict:
@@ -145,3 +178,52 @@ def generate_chat_response(user_message: str) -> str:
     except Exception as e:
         print("Error generating chatbot response:", str(e))
         return "Sorry, I couldn't process that request."
+
+
+def generate_advice(issue_details: str) -> str:
+    # Initialize Vertex AI
+    vertexai.init(project=project_name, location="us-central1")
+    model = GenerativeModel("gemini-1.5-flash-002")
+    generation_config = GenerationConfig(
+        max_output_tokens=500,
+        temperature=0.5,
+        top_p=0.9,
+        top_k=40
+    )
+
+    # Construct Aava services summary
+    services_description = "\n".join(
+        f"{service['service_name']}: {service['description']} (Learn more: {service['link']})"
+        for service in aava_services.values()
+    )
+
+    # Construct the prompt with explicit instructions for format and brevity
+    prompt = (
+        f"You are an AI assistant tasked with providing concise, structured advice on the following workplace issue:\n"
+        f"{issue_details}\n\n"
+        "Your response should be in this format:\n"
+        "1. **Brief Analysis**: A short, factual analysis of the issue in one or two sentences.\n"
+        "2. **Immediate Actions**: List 2-3 practical steps the individual can take right now to address the issue.\n"
+        "3. **Relevant Aava Services**: If applicable, briefly recommend any relevant services from Aava Medical Centre that can provide additional support. Give the link where to find more information, example: https://www.aava.fi/en/online-coachings/masters-of-recovery\n"
+        "4. **Final Advice**: Provide one or two sentences of general advice for handling the issue in the future.\n\n"
+        "Relevant Aava Medical Centre services include:\n\n"
+        f"{services_description}\n\n"
+        "Respond concisely and directly."
+    )
+
+    # Generate advice
+    try:
+        response = model.generate_content(
+            prompt,
+            generation_config=generation_config
+        )
+
+        response_text = response.text.strip()
+        
+        # Convert markdown to HTML for frontend rendering
+        advice_html = markdown.markdown(response_text)
+        return advice_html
+
+    except Exception as e:
+        print("Error generating advice:", str(e))
+        return "Sorry, I couldn't generate advice for this issue."

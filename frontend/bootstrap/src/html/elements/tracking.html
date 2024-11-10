@@ -3,6 +3,88 @@
   <head>
     @@include('../layouts/head-page-meta.html', {'title': 'Progress Tracker - Well-being Dashboard'}) @@include('../layouts/head-css.html')
     <style>
+      .progress-circle {
+        width: 100px;
+        height: 100px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .progress-circle svg {
+        transform: rotate(-90deg);
+      }
+
+      .progress-circle circle {
+        fill: none;
+        stroke-width: 8;
+      }
+
+      .progress-background {
+        stroke: #e6e6e6;
+      }
+
+      .progress-bar {
+        transition: stroke-dashoffset 0.5s ease;
+      }
+
+      .progress-text {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #333;
+        position: absolute;
+      }
+
+      .status-dropdown,
+      .notes-textarea {
+        display: none; /* Hidden by default, shown in edit mode */
+      }
+      .edit-icon {
+        cursor: pointer;
+        font-size: 1.2em;
+        color: #007bff;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+      }
+      .progress-display {
+        margin-top: 10px;
+      }
+
+      .status-dropdown {
+        width: 100%;
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-top: 10px;
+      }
+
+      .notes-textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-top: 10px;
+        font-family: Arial, sans-serif;
+      }
+
+      .header-section {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      .header-section h2 {
+        font-weight: 700;
+        font-size: 2.5em;
+        color: #2b2b2b;
+        margin: 0;
+      }
+      .header-section p {
+        color: #6c757d;
+        font-size: 1.1em;
+        margin-top: 10px;
+      }
+
       .progress-container {
         max-width: 800px;
         margin: auto;
@@ -16,15 +98,80 @@
         margin-bottom: 20px;
       }
       .progress-header h3 {
+        text-align: center;
         font-size: 1.8em;
         color: #2b2b2b;
+        margin-bottom: 20px;
       }
-      .progress-details p {
+      .highlight-box {
+        padding: 20px;
+        background: #f9fafc;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      .highlight-box h4 {
+        font-size: 1.2em;
+        color: #333;
+      }
+      .small-box {
+        background: #f9fafc;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .small-box h5 {
         font-size: 1.1em;
-        color: #555;
+        margin-bottom: 5px;
+        color: #495057;
       }
-      .progress-bar {
-        margin-top: 15px;
+      .fetch-advice-btn {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1em;
+        cursor: pointer;
+      }
+
+      .fetch-advice-btn:hover {
+        background-color: #0056b3;
+      }
+
+      .edit-btn {
+        background-color: transparent;
+        border: none;
+        color: #007bff;
+        font-size: 1.1em;
+        cursor: pointer;
+      }
+
+      .advice-note {
+        font-size: 0.9em;
+        color: #6c757d;
+        margin-top: 5px;
+        text-align: left;
+      }
+
+      .markdown-advice {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+      }
+      .markdown-advice h2,
+      .markdown-advice h3,
+      .markdown-advice h4 {
+        color: #2b2b2b;
+        margin-top: 1em;
+      }
+      .markdown-advice p,
+      .markdown-advice li {
+        margin: 0.5em 0;
+      }
+      .markdown-advice strong {
+        color: #007bff;
       }
     </style>
   </head>
@@ -33,6 +180,11 @@
 
     <div class="pc-container">
       <div class="pc-content">
+        <div class="header-section">
+          <h2>Progress Tracker</h2>
+          <p>Sample of a Manager View: details and tracking of the selected issue.</p>
+        </div>
+
         <div class="progress-container" id="progress-list">
           <!-- Dynamic Content from JavaScript will go here -->
         </div>
@@ -42,8 +194,8 @@
     @@include('../layouts/footer-block.html') @@include('../layouts/footer-js.html')
 
     <script>
-      // Function to Retrieve and Display Selected Issue in Progress Tracker
-      // Function to Retrieve and Display Selected Issue in Progress Tracker
+      let isEditing = false; // Track edit mode
+
       function displayProgress() {
         const selectedIssueId = localStorage.getItem('selectedIssueId');
         const progressTracker = JSON.parse(localStorage.getItem('progressTracker'));
@@ -52,50 +204,172 @@
         const selectedIssue = progressTracker.find((entry) => entry.issueId == selectedIssueId);
         const issueDetails = issues.find((issue) => issue.id == selectedIssueId);
 
+        console.log('Issue Details:', issueDetails); // Add this line
+
         const progressList = document.getElementById('progress-list');
 
         if (selectedIssue && issueDetails) {
+          const statusOptions = ['New Issue', 'Acknowledged', 'In Progress', 'Continuous Development', 'Solved'];
+          const progressValue = getProgressValue(selectedIssue.status);
+
           progressList.innerHTML = `
-        <div class="progress-header">
-            <h3>${issueDetails.summary}</h3>
-        </div>
-        <div class="progress-details">
-            <p><strong>Department:</strong> ${selectedIssue.department}</p>
-            <p><strong>Status:</strong> ${selectedIssue.status}</p>
-            <p><strong>Category:</strong> ${selectedIssue.category}</p>
-            <p><strong>Details:</strong> ${issueDetails.content}</p>
-            <p><strong>AI Advice:</strong> Placeholder for AI-generated advice.</p>
-            <p><strong>Company Notes:</strong> ${
-              selectedIssue.actionsTaken.length > 0 ? selectedIssue.actionsTaken.join('<br>') : 'No actions taken yet.'
-            }</p>
-            <div class="progress-bar">
-                <strong>Progress:</strong>
-                <progress value="${getProgressValue(selectedIssue.status)}" max="100"></progress>
+            <!-- Dashboard Header -->
+            <div class="progress-header">
+              <h3>${issueDetails.summary}</h3>
             </div>
-        </div>`;
+
+            <!-- Main Content Section -->
+            <div style="display: flex; gap: 20px;">
+            
+              <!-- Left Column (Issue Details) -->
+              <div style="flex: 1; position: relative;">
+                <div class="highlight-box" style="padding: 20px;">
+                  <h4 style="font-size: 1.5em; margin-bottom: 10px; font-weight: bold;">Details</h4>
+                  <p><strong>Department:</strong> ${selectedIssue.department}</p>
+                  <p><strong>Category:</strong> ${selectedIssue.category}</p>
+                  <p><strong>Details:</strong> ${issueDetails.content}</p>
+                  <h4>Status</h4>
+                  <p class="status-display">${selectedIssue.status}</p>
+                  <select class="status-dropdown">
+                    ${statusOptions
+                      .map((status) => `<option value="${status}" ${status === selectedIssue.status ? 'selected' : ''}>${status}</option>`)
+                      .join('')}
+                  </select>
+                </div>
+              </div>
+              
+              <!-- Right Column (Progress Circle) -->
+              <div style="width: 150px; display: flex; flex-direction: column; align-items: center;">
+                <div class="progress-circle" style="margin-bottom: 20px;">
+                  <svg width="100" height="100">
+                    <circle cx="50" cy="50" r="45" class="progress-background"></circle>
+                    <circle cx="50" cy="50" r="45" class="progress-bar" stroke-dasharray="282.6" stroke-dashoffset="${
+                      282.6 - (progressValue / 100) * 282.6
+                    }" style="stroke: ${getProgressColor(progressValue)};"></circle>
+                  </svg>
+                  <div class="progress-text">${progressValue}%</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Company Notes Section -->
+            <div class="small-box" style="margin-top: 20px;">
+              <h5>Company Notes</h5>
+              <p class="notes-display">${
+                selectedIssue.actionsTaken.length > 0 ? selectedIssue.actionsTaken.join('<br>') : 'No actions taken yet.'
+              }</p>
+              <textarea class="notes-textarea" rows="4">${selectedIssue.actionsTaken.join('\n')}</textarea>
+              <button class="edit-btn" onclick="toggleEditMode()">✏️ Edit</button>
+              <div id="warning-message" style="display: none; color: red; margin-top: 10px;"></div>
+              <button class="save-btn fetch-advice-btn" onclick="saveUpdates(${selectedIssueId})" style="display: none; margin-top: 10px;">Save</button>
+            </div>
+            
+            <!-- Button Row for Edit and AI Advice -->
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+            </div>
+            
+            <!-- AI Advice Output -->
+            <div class="small-box" style="margin-top: 20px;">
+              <h5>AI Advice</h5>
+              <div id="ai-advice" class="markdown-advice" style="margin-top: 10px;">Click on the button to get advice!</div>
+              <p class="advice-note" style="margin-top: 10px;">Note: The AI may suggest Aava's coaching services for support.</p>
+              <button class="fetch-advice-btn" onclick="fetchAIAdvice('${encodeURIComponent(issueDetails.content)}')">Get AI Advice</button>
+            </div>
+          `;
+
+          toggleDisplayMode(isEditing);
         } else {
           progressList.innerHTML = '<p>No issue selected or details unavailable.</p>';
         }
       }
 
-      // Initialize displayProgress to load selected issue data on page load
-      document.addEventListener('DOMContentLoaded', () => {
-        displayProgress();
-      });
+      function toggleEditMode() {
+        isEditing = !isEditing;
+        toggleDisplayMode(isEditing);
+      }
 
-      // Utility Function to Map Status to Progress Value
+      function toggleDisplayMode(editMode) {
+        document.querySelector('.status-dropdown').style.display = editMode ? 'block' : 'none';
+        document.querySelector('.status-display').style.display = editMode ? 'none' : 'block';
+        document.querySelector('.notes-textarea').style.display = editMode ? 'block' : 'none';
+        document.querySelector('.notes-display').style.display = editMode ? 'none' : 'block';
+        document.querySelector('.save-btn').style.display = editMode ? 'inline-block' : 'none';
+        document.getElementById('warning-message').style.display = 'none';
+      }
+
       function getProgressValue(status) {
         switch (status) {
-          case 'To Do':
+          case 'New Issue':
             return 0;
+          case 'Acknowledged':
+            return 20;
           case 'In Progress':
             return 50;
-          case 'Completed':
+          case 'Continuous Development':
+            return 75;
+          case 'Solved':
             return 100;
           default:
             return 0;
         }
       }
+
+      function getProgressColor(value) {
+        if (value <= 20) return '#ff4d4d';
+        if (value <= 50) return '#ffa64d';
+        if (value <= 75) return '#ffeb3b';
+        return '#4caf50';
+      }
+
+      function saveUpdates(issueId) {
+        const progressTracker = JSON.parse(localStorage.getItem('progressTracker'));
+        const issueIndex = progressTracker.findIndex((entry) => entry.issueId == issueId);
+
+        if (issueIndex !== -1) {
+          const newStatus = document.querySelector('.status-dropdown').value;
+          const newNotes = document.querySelector('.notes-textarea').value.trim();
+
+          // Check for required notes
+          if (
+            (newStatus === 'In Progress' || newStatus === 'Continuous Development' || newStatus === 'Solved') &&
+            (!newNotes || newNotes === 'No actions taken yet.')
+          ) {
+            document.getElementById('warning-message').innerText = "Hey, describe in details the actions you've taken so far!";
+            document.getElementById('warning-message').style.display = 'block';
+            return; // Do not save if validation fails
+          }
+
+          progressTracker[issueIndex].status = newStatus;
+          progressTracker[issueIndex].actionsTaken = newNotes ? newNotes.split('\n') : ['No actions taken yet.'];
+
+          localStorage.setItem('progressTracker', JSON.stringify(progressTracker));
+
+          isEditing = false;
+          displayProgress();
+        }
+      }
+
+      async function fetchAIAdvice(encodedIssueContent) {
+        const issueContent = decodeURIComponent(encodedIssueContent);
+        console.log('Issue Content on Button Click:', issueContent); // Log for debugging
+
+        try {
+          const response = await fetch('http://127.0.0.1:5000/get_advice', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ issue: issueContent })
+          });
+          const data = await response.json();
+          document.getElementById('ai-advice').innerHTML = data.advice;
+        } catch (error) {
+          console.error('Error fetching AI advice:', error);
+          document.getElementById('ai-advice').innerText = 'Failed to retrieve advice.';
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        displayProgress();
+      });
     </script>
   </body>
 </html>

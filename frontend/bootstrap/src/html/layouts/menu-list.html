@@ -1,3 +1,28 @@
+<style>
+  /* Basic styling for the main sidebar items */
+  .pc-item {
+    padding-left: 10px;
+  }
+
+  /* Indentation and styling for nested menu items */
+  .sub-menu {
+    padding-left: 30px; /* Indent sub-menu items more to indicate hierarchy */
+    list-style-type: none; /* Remove bullets */
+    margin-top: 5px; /* Optional: Adds a bit of space between items */
+  }
+
+  .sub-menu .pc-item {
+    font-size: 0.9em; /* Smaller font for sub-items */
+    color: #6c757d; /* Lighter color for sub-items */
+  }
+
+  /* Ensure sub-menu items are displayed correctly */
+  .sub-menu .pc-link {
+    display: inline-flex;
+    align-items: center;
+  }
+</style>
+
 <li class="pc-item pc-caption">
   <label>Overview</label>
 </li>
@@ -20,14 +45,17 @@
 <li class="pc-item">
   <a href="../elements/top_issues.html" class="pc-link">
     <span class="pc-micon"><i class="ph ph-warning"></i></span>
-    <span class="pc-mtext">Top Issues</span>
+    <span class="pc-mtext">Issues</span>
   </a>
-</li>
-<li class="pc-item">
-  <a href="../elements/tracking.html" class="pc-link">
-    <span class="pc-micon"><i class="ph ph-check-square"></i></span>
-    <span class="pc-mtext">Progress Tracking</span>
-  </a>
+  <!-- Nested sub-menu for Progress Tracking -->
+  <ul class="sub-menu">
+    <li class="pc-item">
+      <a href="../elements/tracking.html" class="pc-link">
+        <span class="pc-micon"><i class="ph ph-check-square"></i></span>
+        <span class="pc-mtext">Issue Progress Tracker</span>
+      </a>
+    </li>
+  </ul>
 </li>
 
 <li class="pc-item pc-caption">

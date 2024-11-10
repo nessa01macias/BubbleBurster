@@ -2,7 +2,7 @@
 from pathlib import Path
 import json
 from flask import Flask, request, jsonify
-from functions import classify_input, generate_chat_response
+from functions import classify_input, generate_chat_response, generate_advice
 from flask_cors import CORS
 
 
@@ -56,6 +56,24 @@ def get_chat_response():
     # Generate a response using the separate function
     bot_response = generate_chat_response(user_message)
     return jsonify({"response": bot_response})
+
+
+@app.route('/get_advice', methods=['POST'])
+def get_advice():
+    data = request.json
+    issue_details = data.get("issue")
+
+    if not issue_details:
+        return jsonify({"response": "No issue details were sent!"}), 400
+
+    # Generate a response using the separate function
+    advice = generate_advice(issue_details)
+    # Ensure response is a dictionary, not a string
+    print("Issue input:", issue_details, "Response:", advice)  # This should be a dictionary
+
+    return jsonify({"advice": advice})
+
+
 
 
 if __name__ == '__main__':

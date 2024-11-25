@@ -4,6 +4,8 @@ Bubble Burster is a group project from **Junction Hackathon 2024**, designed to 
 
 Try it out [**here**](http://13.51.121.171) and watch our Pitch video [**here**](https://www.youtube.com/watch?v=7Z2e3dyo3G8)!
 
+Project by Melany Macías, Leo Huovinen, Lev Kharlashkin, and Mika Hämäläinen from Metropolia UAS.
+
 ---
 
 ## **🌟 Key Features**
